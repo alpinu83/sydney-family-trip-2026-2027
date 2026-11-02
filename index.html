@@ -298,7 +298,11 @@ const P={
  wolli:{n:'Woolworths Wolli Creek',q:'Woolworths Wolli Creek',ll:[-33.9300,151.1540]},
  carriage:{n:'Carriageworks',q:'Carriageworks Eveleigh',ll:[-33.8937,151.1927]},
  qvb:{n:'QVB · Pitt St Mall',q:'Queen Victoria Building Sydney',ll:[-33.8718,151.2067]},
- museum:{n:'Australian Museum',q:'Australian Museum Sydney',ll:[-33.8744,151.2132]}
+ museum:{n:'Australian Museum',q:'Australian Museum Sydney',ll:[-33.8744,151.2132]},
+ meet:{n:'시내 투어 집결지 (예약 확인서 기준)',q:'Town Hall Station Sydney',ll:[-33.8732,151.2070]},
+ featherdale:{n:'Featherdale Sydney Wildlife Park',q:'Featherdale Sydney Wildlife Park Doonside',ll:[-33.7680,150.8880]},
+ echo:{n:'Echo Point · 세 자매봉',q:'Echo Point Lookout Katoomba',ll:[-33.7320,150.3120]},
+ scenic:{n:'Scenic World',q:'Scenic World Katoomba',ll:[-33.7280,150.3010]}
 };
 const U={
  forecourt:'https://www.sydneyoperahouse.com/experiences/new-years-eve-forecourt',
@@ -312,6 +316,11 @@ const U={
  nye:'https://transportnsw.info/events/2026/12/sydney-new-years-eve-2026',
  northSyd:'https://www.northsydney.nsw.gov.au/NYE',
  trip:'https://transportnsw.info/trip',
+ psTour:'https://kr.trip.com/things-to-do/detail/103092853/',
+ bmTour:'https://kr.trip.com/things-to-do/detail/103422385/',
+ bmKlook:'https://www.klook.com/ko/activity/167648-featherdale-scenic-world-blue-mountains-tour-with-korean-guide/',
+ starTour:'https://kr.trip.com/things-to-do/detail/102620740/',
+ sohTour:'https://www.sydneyoperahouse.com/tours/sydney-opera-house-tour',
  airportLink:'https://airportlink.com.au/trip-information/price',
  fares:'https://www.transport.nsw.gov.au/system/files/media/documents/2026/public-transport-fares-and-ticketing-brochure.pdf'
 };
@@ -329,11 +338,12 @@ const DAYS=[
  {t:'10:00',k:'tip',title:'NYE 포코트 무료 예약 오픈',n:'오페라하우스 포코트 12/31 관람석. 10:00 오픈 직후 바로 예약(1회 최대 6장)',url:U.forecourt,must:1},
  {t:'10:30',k:'stay',title:'짐 맡기기 · 얼리 체크인 문의',p:'shangri'},
  {t:'11:30',k:'food',title:'The Rocks 브런치',n:'오래된 골목과 카페가 모여 있는 동네. 첫 끼는 가볍게',p:'rocks',go:'도보 약 5분',mode:'walking'},
- {t:'13:00',k:'see',title:'Circular Quay → 오페라하우스 → 보타닉 가든',n:'하버브리지와 오페라하우스 사진 포인트. 그늘 많은 보타닉 가든에서 쉬어가기(무료)',p:'opera',go:'도보 약 10분',mode:'walking'},
- {t:'15:00',k:'stay',title:'체크인 · 낮잠',n:'첫날 오후는 꼭 쉬기. 아이들 컨디션이 남은 일정을 좌우합니다',p:'shangri'},
+ {t:'13:30',k:'star',title:'오페라하우스 한국어 투어 (1시간)',n:'공연장 안을 걸으며 건물 이야기를 듣는 가이드 투어. 약 2.5km, 계단 약 300개. 시간은 예약한 회차 기준',p:'opera',go:'도보 약 10분',mode:'walking',url:U.sohTour,must:1},
+ {t:'14:40',k:'see',title:'보타닉 가든 산책',n:'그늘 많은 정원에서 쉬어가기(무료). 하버브리지·오페라하우스 사진 포인트',p:'garden',go:'도보 약 5분',mode:'walking'},
+ {t:'15:30',k:'stay',title:'체크인 · 낮잠',n:'첫날 오후는 꼭 쉬기. 아이들 컨디션이 남은 일정을 좌우합니다',p:'shangri'},
  {t:'17:30',k:'shop',title:'Barangaroo 울월스 장보기',n:'물, 과일, 시리얼, 우유, 샌드위치 재료 2~3일치. 박싱데이라 영업시간이 다를 수 있음',p:'barangaroo',go:'도보 약 10분',mode:'walking',c:'약 $80'},
  {t:'19:00',k:'food',title:'객실 또는 근처에서 가벼운 저녁',p:'shangri'}
-],tips:['10:00 포코트 예약 (실패 시 준비 탭의 예비안 참고)','장보기 영수증은 바로 지출 탭에 기록','내일 아침 페리 시간 확인']},
+],tips:['10:00 포코트 예약 (실패 시 준비 탭의 예비안 참고)','오페라하우스 한국어 투어 회차 확인','장보기 영수증은 바로 지출 탭에 기록','내일 아침 페리 시간 확인']},
 
 {date:'2026-12-27',tag:'Day 2',title:'타롱가 동물원',sum:'페리 타고 동물원으로. 오전에 동물이 가장 활발합니다',stay:'Shangri-La Sydney',stayP:'shangri',stayN:'2/2박',items:[
  {t:'08:40',k:'move',title:'Circular Quay 부두로',n:'물, 모자, 선크림, 전날 산 과일과 샌드위치 챙기기',p:'quay',go:'도보 약 10분',mode:'walking'},
@@ -354,27 +364,29 @@ const DAYS=[
  {t:'15:30',k:'move',title:'시내로 귀환',p:'furama',go:'버스 + 기차 · 약 45분',mode:'transit'},
  {t:'16:30',k:'stay',title:'Furama 체크인 · 휴식',p:'furama'},
  {t:'18:30',k:'food',title:'달링하버 야경 · 저녁',p:'darling',go:'도보 약 10분',mode:'walking'}
-],tips:['수영복·래시가드·수건·아쿠아슈즈','해변 날씨·파도 경보 확인','내일 렌터카 픽업 시간 재확인']},
+],tips:['수영복·래시가드·수건·아쿠아슈즈','해변 날씨·파도 경보 확인','내일 포트스테판 투어 집결 시간·장소 확인 (일찍 자기)']},
 
-{date:'2026-12-29',tag:'Day 4',title:'포트스테판 하루 여행',sum:'Oakvale 동물원 → 사막 샌드보딩 → 돌고래 크루즈. 샌드보딩이 15:30까지만 출발해서 이 순서로',stay:'Furama Darling Harbour',stayP:'furama',stayN:'2/3박',items:[
- {t:'07:00',k:'car',title:'렌터카로 출발',n:'시드니 출발 단체투어는 Oakvale을 빼는 경우가 많아 렌터카나 전용 차량 추천. 아이 부스터시트, 보험, 톨비 결제 확인',p:'furama'},
- {t:'10:00',k:'star',title:'Oakvale Wildlife Park',n:'10:00 개장. 11:00 아기 동물 우유 주기, 11:30 트랙터 타기. 코알라·캥거루와 가까이',p:'oakvale',go:'자동차 · 약 2시간 (181km)',mode:'driving',url:U.oakvale,c:'가족권 $130'},
- {t:'12:15',k:'star',title:'Stockton 사막 4WD · 샌드보딩',n:'Anna Bay 집결. 4WD로 모래언덕에 올라가 샌드보딩. 09:30~15:30 사이 출발',p:'annaBay',go:'자동차 · 약 25분',mode:'driving',url:U.dolphin,c:'패키지 4인 약 $283'},
- {t:'14:00',k:'food',title:'Nelson Bay 늦은 점심',p:'nelson',go:'자동차 · 약 20분',mode:'driving'},
- {t:'14:30',k:'ferry',title:'돌고래 크루즈 (약 90분)',n:"d'Albora Marina 출발. 돌고래 보는 배, 따뜻한 날엔 배 뒤 그물에 들어가 물놀이 가능. 예약할 때 크루즈 시간 고정",p:'nelson'},
- {t:'16:15',k:'car',title:'시드니로 귀환',n:'운전자 피로가 크니 중간에 꼭 쉬기',p:'furama',go:'자동차 · 약 2시간 30분',mode:'driving'},
- {t:'19:00',k:'food',title:'숙소 근처에서 간단한 저녁',p:'darling'}
-],tips:['Dolphins & Dunes 패키지 예약 (크루즈 14:30 전후)','여벌옷·수건·모래 털 지퍼백·물 넉넉히','멀미약 (장거리 차량 + 배)','렌터카 반납 시간과 연료 확인']},
+{date:'2026-12-29',tag:'Day 4',title:'포트스테판 한국어 투어',sum:'한국어 가이드 버스 투어로 Oakvale 동물원, 사막 샌드보딩, 돌고래 크루즈까지 하루에',stay:'Furama Darling Harbour',stayP:'furama',stayN:'2/3박',items:[
+ {t:'06:40',k:'move',title:'시내 집결지로 이동',n:'집결 장소와 시간은 예약 확인서 기준. Furama에서 시내 집결지까지 도보·택시로 가까움',p:'meet',go:'도보·택시 · 약 10~15분',mode:'walking'},
+ {t:'07:00',k:'move',title:'한국어 가이드 버스 출발',n:'포트스테판까지 약 2시간 30분. 버스에서 아침 간단히',p:'meet',url:U.psTour,must:1,c:'1인 약 10~12만원~'},
+ {t:'10:00',k:'star',title:'Oakvale Wildlife Park',n:'코알라·캥거루를 가까이서. 예약한 상품에 Oakvale이 포함됐는지 꼭 확인',p:'oakvale'},
+ {t:'12:00',k:'food',title:'점심 (상품 포함 여부 확인)',p:'oakvale'},
+ {t:'13:00',k:'star',title:'애나베이 사막 4WD · 샌드보딩',n:'높이 30m 안팎 모래언덕을 보드로 미끄러져 내려오기. 마스크·양말 있으면 편함',p:'annaBay'},
+ {t:'14:30',k:'ferry',title:'넬슨베이 돌고래 크루즈 (옵션)',n:'예약할 때 돌고래 크루즈 옵션을 꼭 추가. 따뜻한 날엔 배 뒤 그물 물놀이 가능',p:'nelson',c:'옵션 추가 요금'},
+ {t:'19:30',k:'move',title:'시드니 도착 · 숙소 복귀',n:'도착 시간은 교통 상황에 따라 달라짐',p:'furama'},
+ {t:'20:00',k:'food',title:'숙소 근처에서 간단한 저녁',p:'darling'}
+],tips:['상품 포함 내역 확인: Oakvale · 점심 · 돌고래 크루즈 옵션','수영복·여벌옷·수건·모래 털 지퍼백','마스크·양말(샌드보딩), 멀미약(버스+배)','선크림·모자·물 넉넉히']},
 
-{date:'2026-12-30',tag:'Day 5',title:'쉬어가는 날 · 맨리',sum:'전날 피로를 풀고 페리로 맨리 해변. 저녁엔 NYE 준비',stay:'Furama Darling Harbour',stayP:'furama',stayN:'3/3박',items:[
- {t:'09:30',k:'stay',title:'늦은 아침 · 빨래',n:'31일 숙소 이동 전에 빨래와 짐 정리',p:'furama'},
- {t:'11:00',k:'ferry',title:'Circular Quay → 맨리 페리',n:'F1 페리 약 30분. 하버 전체를 볼 수 있는 저렴한 유람선 역할',p:'manly',go:'F1 페리 · 약 30분',mode:'transit'},
- {t:'11:45',k:'swim',title:'맨리 비치 · 셸리 비치',n:'셸리 비치는 물이 잔잔해 아이들 물놀이·스노클링에 좋음',p:'shelly',go:'도보 약 15분',mode:'walking'},
- {t:'13:00',k:'food',title:'맨리 점심',p:'manly'},
- {t:'15:30',k:'ferry',title:'페리로 귀환',p:'darling',go:'F1 페리 · 약 30분',mode:'transit'},
+{date:'2026-12-30',tag:'Day 5',title:'블루마운틴 + 페더데일 동물원',sum:'오전 출발 한국어 투어. 오후 일찍 돌아와서 NYE 전날 쉬기',stay:'Furama Darling Harbour',stayP:'furama',stayN:'3/3박',items:[
+ {t:'07:30',k:'move',title:'시내 집결 · 투어 출발',n:'집결 장소·시간은 예약 확인서 기준',p:'meet',url:U.bmTour,must:1,c:'1인 약 5~8만원~'},
+ {t:'08:30',k:'star',title:'페더데일 동물원 오픈런',n:'개장 직후 입장해서 코알라 보고 캥거루·왈라비 먹이 주기. 사람 몰리기 전이라 여유로움',p:'featherdale'},
+ {t:'10:45',k:'see',title:'에코포인트 · 세 자매봉',n:'블루마운틴 대표 전망대. 사진 찍기 좋은 시간',p:'echo',go:'버스 · 약 1시간',mode:'driving'},
+ {t:'11:30',k:'star',title:'시닉월드 (옵션)',n:'세계에서 가장 가파른 궤도열차 + 케이블카. 아이들이 가장 좋아하는 코스라 옵션 추천',p:'scenic',c:'성인 $64~ · 아동 $38.40~'},
+ {t:'14:30',k:'move',title:'시드니 도착',n:'도착 시간은 상품마다 다름',p:'meet',go:'버스 · 약 1시간 30분',mode:'driving'},
+ {t:'15:30',k:'stay',title:'숙소 휴식 · 빨래 · 짐 정리',n:'내일 숙소 이동과 긴 NYE 하루를 위해 체력 충전',p:'furama'},
  {t:'17:00',k:'shop',title:'NYE 준비 장보기',n:'물, 간식, 샌드위치, 돗자리, 우비. 내일은 하루 종일 밖이라 넉넉히',p:'darling',c:'약 $60'},
- {t:'18:30',k:'show',title:'Storytime Ballet: 신데렐라',n:'아이들용 짧은 발레(12/17~1/3). 저학년 눈높이라 초3에 적합, 초6은 시시할 수도 있음',p:'opera',url:U.ballet,opt:1}
-],tips:['NYE 가방: 보조배터리·우비·간식·물·얇은 겉옷','쇼핑 예산 상한 정해두기','내일 이동 택시 시간 정하기']},
+ {t:'18:30',k:'food',title:'달링하버 저녁',p:'darling'}
+],tips:['시닉월드 옵션 포함 여부 결정','NYE 가방: 보조배터리·우비·간식·물·얇은 겉옷','내일 이동 택시 시간 정하기']},
 
 {date:'2026-12-31',tag:'Day 6',title:'새해 전야 불꽃놀이',sum:'오전에 공항 호텔로 옮기고, 낮부터 오페라하우스 포코트에서 불꽃놀이',stay:'Crowne Plaza Sydney Airport',stayP:'crowne',stayN:'1/3박',items:[
  {t:'09:00',k:'car',title:'Furama → Crowne Plaza 짐 이동',n:'짐부터 해결. 시내 도로는 낮 12시부터 통제가 시작되니 일찍',p:'crowne',go:'택시 · 약 20~25분',mode:'driving',c:'약 $45'},
@@ -386,23 +398,27 @@ const DAYS=[
  {t:'00:30',k:'move',title:'호텔로 귀환',n:'자정 이후 기차가 자주 다닙니다. 택시·우버는 거의 불가능하다고 생각하기',p:'crowne',go:'기차 · 혼잡',mode:'transit'}
 ],tips:['포코트 예약 실패 시: 준비 탭의 예비 관람지 확인','시내에 차로 들어가지 않기','귀가 경로·막차 정보 미리 캡처 (Transport NSW)']},
 
-{date:'2027-01-01',tag:'Day 7',title:'새해 첫날 · 느긋하게',sum:'늦잠 자고 호텔 근처에서 쉬는 날. 문 닫는 곳이 많으니 가볍게',stay:'Crowne Plaza Sydney Airport',stayP:'crowne',stayN:'2/3박',items:[
- {t:'10:00',k:'stay',title:'늦은 아침 · 호텔 휴식',p:'crowne'},
- {t:'13:00',k:'see',title:'Sydney Park 놀이터 · 산책',n:'넓은 공원과 큰 놀이터(무료). 호텔에서 가까워 부담 없음',p:'sydneyPark',go:'택시 · 약 10분',mode:'driving'},
- {t:'16:00',k:'shop',title:'Wolli Creek 울월스 장보기',n:'내일 아침과 귀국 전 간식. 1월 1일 영업시간 꼭 확인',p:'wolli',go:'택시·기차 · 약 10분',mode:'transit',c:'약 $50'},
- {t:'17:00',k:'show',title:'오페라 공연 (선택)',n:'Great Opera Hits 1/1 17:00 · 19:30. 체력이 남으면',p:'opera',url:U.operaHits,opt:1},
- {t:'18:30',k:'food',title:'저녁 · 짐 1차 정리',p:'crowne'}
-],tips:['1/1 매장·식당 영업 여부 확인','수하물 무게 확인','지금까지 지출 합계 확인']},
+{date:'2027-01-01',tag:'Day 7',title:'새해 첫날 · 블루마운틴 별보기',sum:'낮에는 푹 쉬고, 오후에 출발해 블루마운틴 일몰과 남반구 별 보기',stay:'Crowne Plaza Sydney Airport',stayP:'crowne',stayN:'2/3박',items:[
+ {t:'10:00',k:'stay',title:'늦잠 · 호텔에서 휴식',n:'어젯밤 NYE로 늦게 잤으니 낮잠까지 충분히. 밤 투어 체력 확보',p:'crowne'},
+ {t:'12:30',k:'food',title:'호텔 근처 점심',p:'crowne'},
+ {t:'14:00',k:'move',title:'호텔 → 시내 집결지',n:'공항역을 쓰면 역 이용료가 붙으니 가까운 역 확인',p:'meet',go:'기차 · 약 20분',mode:'transit'},
+ {t:'15:00',k:'move',title:'블루마운틴 선셋 별보기 투어 출발',n:'한국어 가이드, 약 6.5시간. 1/1 운행 여부 꼭 확인 (안 되면 1/2 저녁으로). 어제 페더데일을 갔으니 동물원 없는 상품 선택',p:'meet',url:U.starTour,must:1,c:'1인 약 6만원~'},
+ {t:'19:30',k:'see',title:'블루마운틴 일몰 전망',n:'여름엔 해가 저녁 8시쯤 져요. 산 위는 쌀쌀하니 겉옷 필수',p:'echo'},
+ {t:'21:00',k:'star',title:'남반구 별 보기',n:'남십자성과 은하수. 날씨가 흐리면 별 보기가 어려울 수 있음',p:'echo'},
+ {t:'22:30',k:'move',title:'시드니 도착 → 호텔',n:'도착 시간은 상품 안내 기준. 늦은 시간이라 택시가 편할 수 있음',p:'crowne',go:'기차·택시',mode:'transit'}
+],tips:['투어 1/1 운행 여부·집결 시간 확인','긴팔 겉옷·담요 (산 위 밤은 쌀쌀함)','아이들 낮잠 꼭 재우기','보조배터리 (별 사진)']},
 
-{date:'2027-01-02',tag:'Day 8',title:'파머스 마켓 · 마지막 시내',sum:'토요일 아침 Carriageworks 시장 구경 후 마지막 쇼핑',stay:'Crowne Plaza Sydney Airport',stayP:'crowne',stayN:'3/3박',items:[
- {t:'07:45',k:'move',title:'호텔 → Redfern역',p:'carriage',go:'기차 + 도보 8분 · 약 25분',mode:'transit'},
- {t:'08:15',k:'star',title:'Carriageworks Farmers Market',n:'토요일 08:00~13:00. 빵, 과일, 커피로 아침. 기차 정비소를 고친 건물이라 구경거리도 많음',p:'carriage',url:U.carriage},
+{date:'2027-01-02',tag:'Day 8',title:'파머스 마켓 · 마지막 시내',sum:'토요일 아침 시장 구경, 오후엔 하고 싶은 것 하나 골라서 여유 있게',stay:'Crowne Plaza Sydney Airport',stayP:'crowne',stayN:'3/3박',items:[
+ {t:'08:00',k:'move',title:'호텔 → Redfern역',n:'어젯밤 늦었으면 출발을 늦춰도 됨 (시장은 13:00까지)',p:'carriage',go:'기차 + 도보 8분 · 약 25분',mode:'transit'},
+ {t:'08:30',k:'star',title:'Carriageworks Farmers Market',n:'토요일 08:00~13:00. 빵, 과일, 커피로 아침. 기차 정비소를 고친 건물이라 구경거리도 많음',p:'carriage',url:U.carriage},
  {t:'10:30',k:'shop',title:'QVB · Pitt St Mall 기념품',n:'꼭 필요한 것만. 면세 환급(TRS)은 한 매장 $300 이상일 때 가능',p:'qvb',go:'기차·버스 · 약 15분',mode:'transit'},
- {t:'12:30',k:'show',title:'La Bohème 낮 공연',n:'오페라하우스 12:30. 길이가 있어 아이들 성향 보고 결정',p:'opera',url:U.boheme,opt:1,c:'1인 $79~'},
- {t:'13:00',k:'see',title:'호주 박물관',n:'공룡과 호주 동물 전시. 공연을 안 보면 이쪽 추천',p:'museum',opt:1},
- {t:'16:30',k:'move',title:'호텔 귀환 · 짐 싸기',n:'여권, 탑승권, 환급 영수증은 한 파우치에',p:'crowne',go:'기차 · 약 20분',mode:'transit'},
- {t:'18:00',k:'food',title:'이른 저녁 · 일찍 자기',p:'crowne'}
-],tips:['보냉백·장바구니 챙기기','휴일 시장 운영 여부 전날 확인','지출 데이터 백업 (준비 탭)']},
+ {t:'13:00',k:'ferry',title:'맨리 페리 · 셸리 비치',n:'페리로 하버를 한 바퀴 보는 저렴한 방법. 셸리 비치는 물이 잔잔해 물놀이 좋음',p:'shelly',opt:1},
+ {t:'14:00',k:'show',title:'Storytime Ballet: 신데렐라',n:'3세 이상 아이용, 1시간 이내. 초3이 원할 때만 (초6에겐 시시할 수 있음). 1인 $59~88',p:'opera',url:U.ballet,opt:1},
+ {t:'14:00',k:'see',title:'호주 박물관',n:'공룡과 호주 동물 전시. 더위·비 올 때 좋은 실내 코스',p:'museum',opt:1},
+ {t:'16:30',k:'shop',title:'Wolli Creek 울월스 장보기',n:'내일 아침·귀국 전 간식. 공항 안보다 저렴',p:'wolli',go:'기차 · 약 20분',mode:'transit',c:'약 $40'},
+ {t:'17:30',k:'stay',title:'호텔 · 짐 싸기',n:'여권, 탑승권, 환급 영수증은 한 파우치에. 수하물 무게 확인',p:'crowne'},
+ {t:'18:30',k:'food',title:'이른 저녁 · 일찍 자기',p:'crowne'}
+],tips:['오후 일정 하나만 고르기','보냉백·장바구니 챙기기','지출 데이터 백업 (준비 탭)']},
 
 {date:'2027-01-03',tag:'귀국',title:'시드니 출발 · 인천 도착',sum:'여유 있게 공항으로. 수고하셨습니다',items:[
  {t:'07:00',k:'car',title:'체크아웃 · 국제선 터미널',n:'호텔 셔틀 또는 택시. 국제선 T1',p:'syd',go:'셔틀·택시 · 약 10~15분',mode:'driving'},
@@ -416,24 +432,25 @@ const DAYS=[
 const CATS=[
  {k:'flight',l:'항공',c:'#5E7389',ic:'fly',n:'성수기 왕복 이코노미 4인 추정. 실제 결제액으로 바꾸세요'},
  {k:'hotel',l:'숙소',c:'#8C7E9C',ic:'stay',n:'샹그릴라 2박 + Furama 3박 + Crowne Plaza 3박 추정. 실제 결제액으로 바꾸세요'},
- {k:'tour',l:'투어·입장',c:'#5E8682',ic:'see',n:'타롱가 $144 + Oakvale $130 + 돌고래·샌드보딩 $283 + 아이스버그 등'},
- {k:'transport',l:'교통·렌터카',c:'#7D869C',ic:'move',n:'택시 4~5회 + 대중교통 + 렌터카 1일·연료·톨'},
+ {k:'tour',l:'투어·입장',c:'#5E8682',ic:'see',n:'타롱가 $144 + 포트스테판 한국어 투어(돌고래 옵션 포함) 약 $600 + 블루마운틴·페더데일(시닉월드 포함) 약 $500 + 선셋 별보기 약 $260 + 아이스버그 등. 4인 추정'},
+ {k:'transport',l:'교통',c:'#7D869C',ic:'move',n:'택시 4~5회 + 대중교통(기차·페리·버스)'},
  {k:'food',l:'외식',c:'#B5806A',ic:'food',n:'하루 약 $170 × 8일 (점심은 도시락 위주)'},
  {k:'grocery',l:'장보기',c:'#9C8A5C',ic:'shop',n:'아침·피크닉·간식 (3~4회)'},
- {k:'show',l:'공연',c:'#A2707C',ic:'show',n:'선택 공연 1회 기준. 안 보면 0으로'},
+ {k:'show',l:'공연·건물투어',c:'#A2707C',ic:'show',n:'오페라하우스 한국어 투어 + 선택 공연 1회 기준'},
  {k:'shopping',l:'쇼핑',c:'#A08E7B',ic:'shop',n:'기념품·선물'},
  {k:'etc',l:'예비·기타',c:'#858A82',ic:'tip',n:'약 5% 여유분'}
 ];
-const DEF_BUDGET={flight:8400,hotel:3340,tour:600,transport:700,food:1360,grocery:300,show:300,shopping:600,etc:700};
+const DEF_BUDGET={flight:8400,hotel:3340,tour:1550,transport:450,food:1360,grocery:300,show:300,shopping:600,etc:700};
 
 const TODO=[
  {id:'eta',t:'호주 ETA(전자여행허가) 4인 신청·승인',d:'출발 전'},
  {id:'fc',t:'오페라하우스 포코트 NYE 무료 예약 (1회 최대 6장)',d:'12/26 10:00 오픈',u:U.forecourt},
  {id:'fc2',t:'예비안: North Sydney 유료 관람지(Bradfield Park, $65) 검토',d:'포코트 실패 시',u:U.northSyd},
+ {id:'soh',t:'오페라하우스 한국어 투어 예약 (12/26 오후)',d:'출발 전',u:U.sohTour},
  {id:'tz',t:'타롱가 가족권 온라인 구매 (2성인+2아동 $144~)',d:'12/27 전',u:U.taronga},
- {id:'car',t:'12/29 렌터카 예약 (부스터시트·보험·톨)',d:'미리'},
- {id:'dd',t:'Dolphins & Dunes 패키지 예약 (크루즈 14:30 전후)',d:'미리',u:U.dolphin},
- {id:'ov',t:'Oakvale 가족권 ($130, 온라인 또는 현장)',d:'12/29',u:U.oakvale},
+ {id:'ps',t:'12/29 포트스테판 한국어 풀코스 예약 (Oakvale 포함 확인 + 돌고래 크루즈 옵션)',d:'연말 성수기, 일찍',u:U.psTour},
+ {id:'bm',t:'12/30 블루마운틴 + 페더데일 오전 투어 예약 (시닉월드 옵션)',d:'연말 성수기, 일찍',u:U.bmTour},
+ {id:'star',t:'1/1 블루마운틴 선셋 별보기 예약 (1/1 운행 여부, 동물원 없는 상품)',d:'연말 성수기, 일찍',u:U.starTour},
  {id:'opal',t:'교통카드: 어른은 컨택리스 카드, 아이들은 Child Opal',d:'도착 후'},
  {id:'show',t:'선택 공연 예매 여부 결정',d:'출발 전'},
  {id:'ins',t:'여행자보험 가입',d:'출발 전'},
@@ -442,7 +459,7 @@ const TODO=[
 ];
 const PACK=['여권 4개 (유효기간 확인)','수영복 · 래시가드 · 아쿠아슈즈','모자 · 선크림 · 선글라스 (자외선 매우 강함)','얇은 겉옷 (저녁·배 위 바람)','우비 · 작은 우산','보조배터리 · 충전 케이블','멀티 어댑터 (호주 I형)','상비약 · 멀미약','물병','보냉백 · 돗자리 (피크닉·NYE)','비치타월 · 지퍼백 (모래·젖은 옷)','장바구니'];
 const LINKS=[
- ['교통 경로 찾기 (Transport NSW)',U.trip],['NYE 교통 안내 2026',U.nye],['오페라하우스 포코트 예약',U.forecourt],['North Sydney NYE 관람지',U.northSyd],['타롱가 동물원 티켓',U.taronga],['Oakvale 운영 시간',U.oakvale],['Dolphins & Dunes 패키지',U.dolphin],['Carriageworks 시장',U.carriage],['NSW 대중교통 요금 (2026)',U.fares],['공항철도 요금',U.airportLink]
+ ['교통 경로 찾기 (Transport NSW)',U.trip],['NYE 교통 안내 2026',U.nye],['오페라하우스 포코트 예약',U.forecourt],['North Sydney NYE 관람지',U.northSyd],['오페라하우스 한국어 투어',U.sohTour],['타롱가 동물원 티켓',U.taronga],['포트스테판 한국어 풀코스 (트립닷컴)',U.psTour],['블루마운틴 + 페더데일 오전 투어 (트립닷컴)',U.bmTour],['블루마운틴 + 페더데일 투어 (클룩)',U.bmKlook],['블루마운틴 선셋 별보기 (트립닷컴)',U.starTour],['Oakvale 운영 시간',U.oakvale],['Carriageworks 시장',U.carriage],['NSW 대중교통 요금 (2026)',U.fares],['공항철도 요금',U.airportLink]
 ];
 
 /* ---------- storage ---------- */
