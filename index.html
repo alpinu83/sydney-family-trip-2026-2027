@@ -570,6 +570,8 @@ const tzTime=tz=>new Intl.DateTimeFormat('en-GB',{timeZone:tz,hour:'2-digit',min
 function todayIdx(){const s=tzDate('Australia/Sydney');return DAYS.findIndex(d=>d.date===s)}
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),1800)}
 function saveAll(){store.set('budget',budget);store.set('expenses',expenses);store.set('checks',checks);store.set('rate',rate);store.set('budgetIn',budgetIn);store.set('dispCur',dispCur);store.set('lastCur',lastCur)}
+const expDateLabel=e=>{if(e.date==='pre'){if(e.pdate){const p=e.pdate.split('-');return '출발 전 · '+(+p[1])+'/'+(+p[2])}return '출발 전'}const L=dLabel(e.date);return L.m+'/'+L.d};
+const expSortKey=e=>e.date==='pre'?'0000'+(e.pdate||''):e.date;
 const won0=n=>Math.round(Number(n)||0).toLocaleString('ko-KR')+'원';
 const expK=e=>e.cur==='KRW'?(+e.amt||0):(+e.aud||0)*rate;
 const budK=k=>budgetIn[k]&&budgetIn[k].cur==='KRW'?(+budgetIn[k].amt||0):(+budget[k]||0)*rate;
@@ -774,10 +776,11 @@ function renderMoney(){
  h+=CATS.map(c=>{const a=byCat[c.k]||0,b=+budget[c.k]||0,p=b?Math.min(100,a/b*100):(a?100:0);return `<div class="catrow"><div class="l"><span>${c.l}</span><span>${money2(a,byCatK[c.k]||0)} / ${money2(b,budK(c.k))}</span></div><div class="cbar"><i class="${b&&a>b?'over':''}" style="width:${p}%;background:${c.c}"></i></div></div>`}).join('');
  h+=`</section><div class="sec-title">날짜별</div><div class="daytot">`;
  h+=`<button class="dt ${S.expDay===null?'on':''}" data-expday=""><span>전체</span><b>${money2(ts,tsK)}</b></button>`;
+ h+=`<button class="dt ${S.expDay==='pre'?'on':''}" data-expday="pre"><span>출발 전</span><b>${money2(byDay.pre||0,byDayK.pre||0)}</b></button>`;
  h+=DAYS.map(d=>{const L=dLabel(d.date);return `<button class="dt ${S.expDay===d.date?'on':''}" data-expday="${d.date}"><span>${L.m}/${L.d} ${L.w}</span><b>${money2(byDay[d.date]||0,byDayK[d.date]||0)}</b></button>`}).join('');
- h+=`</div><div class="sec-title">지출 내역${S.expDay?' · '+dLabel(S.expDay).m+'/'+dLabel(S.expDay).d:''}</div><section class="card" style="padding:4px 14px">`;
- const list=expenses.filter(e=>!S.expDay||e.date===S.expDay).slice().sort((a,b)=>(b.date+b.at).localeCompare(a.date+a.at));
- h+=list.length?list.map(e=>{const c=CATS.find(x=>x.k===e.cat)||CATS[8];const L=dLabel(e.date);const orig=e.cur==='KRW'?won0(e.amt):aud(e.amt,2);const conv=e.cur==='KRW'?'≈ '+aud(e.aud,2):'≈ '+won0(e.aud*rate);return `<div class="exp"><span class="ci" style="background:${c.c}">${ico(c.ic)}</span><div class="t"><b>${esc(e.desc)}</b><small>${L.m}/${L.d} · ${c.l} · ${e.pay==='cash'?'현금':'카드'}</small></div><div class="amt">${orig}<small>${conv}</small></div><button class="icon-btn" data-del="${e.id}" aria-label="삭제">${ico('trash')}</button></div>`}).join(''):'<div class="empty">아직 기록이 없어요.<br>오른쪽 아래 + 버튼으로 바로 기록하세요.</div>';
+ h+=`</div><div class="sec-title">지출 내역${S.expDay?' · '+(S.expDay==='pre'?'출발 전':dLabel(S.expDay).m+'/'+dLabel(S.expDay).d):''}</div><section class="card" style="padding:4px 14px">`;
+ const list=expenses.filter(e=>!S.expDay||e.date===S.expDay).slice().sort((a,b)=>(expSortKey(b)+b.at).localeCompare(expSortKey(a)+a.at));
+ h+=list.length?list.map(e=>{const c=CATS.find(x=>x.k===e.cat)||CATS[8];const orig=e.cur==='KRW'?won0(e.amt):aud(e.amt,2);const conv=e.cur==='KRW'?'≈ '+aud(e.aud,2):'≈ '+won0(e.aud*rate);return `<div class="exp"><span class="ci" style="background:${c.c}">${ico(c.ic)}</span><div class="t"><b>${esc(e.desc)}</b><small>${expDateLabel(e)} · ${c.l} · ${e.pay==='cash'?'현금':'카드'}</small></div><div class="amt">${orig}<small>${conv}</small></div><button class="icon-btn" data-del="${e.id}" aria-label="삭제">${ico('trash')}</button></div>`}).join(''):'<div class="empty">아직 기록이 없어요.<br>오른쪽 아래 + 버튼으로 바로 기록하세요.</div>';
  h+=`</section><p class="note">원화로 입력한 금액은 원화 그대로 보관되고, 호주달러 환산은 준비 탭의 환율로 계산합니다. 기록은 이 휴대폰의 브라우저에만 저장되니 가끔 백업 파일을 저장해 두세요.</p>`;
  return h;
 }
@@ -811,14 +814,16 @@ function renderPrep(){
 function openSheet(html){$('#sheet').innerHTML='<div class="grab"></div>'+html;$('#overlay').classList.add('show')}
 function closeSheet(){$('#overlay').classList.remove('show');$('#sheet').innerHTML=''}
 function sheetAdd(){
- const ti=todayIdx();const def=(S.tab==='money'&&S.expDay)||(ti>=0?DAYS[ti].date:DAYS[S.day].date);
+ const ti=todayIdx();const preTrip=tzDate('Asia/Seoul')<'2026-12-25';const def=(S.tab==='money'&&S.expDay)||(ti>=0?DAYS[ti].date:(preTrip?'pre':DAYS[S.day].date));
  openSheet(`<h3>지출 추가<button class="icon-btn" data-act="close">${ico('x')}</button></h3>
  <div class="field"><label>금액</label><div class="row2"><input class="inp" id="fAmt" type="number" inputmode="decimal" step="any" min="0" placeholder="0"><div class="seg" id="fCur"><button class="${lastCur==='AUD'?'on':''}" data-v="AUD">A$</button><button class="${lastCur==='KRW'?'on':''}" data-v="KRW">원</button></div></div><small class="muted" id="fConv" style="display:block;margin-top:5px;font-size:12px">&nbsp;</small></div>
  <div class="field"><label>내용</label><input class="inp" id="fDesc" maxlength="60" placeholder="예: 울월스 과일·물"></div>
  <div class="field"><label>카테고리</label><div class="catgrid" id="fCat">${CATS.map((c,i)=>`<button data-v="${c.k}" class="${c.k==='food'?'on':''}">${c.l}</button>`).join('')}</div></div>
- <div class="row2"><div class="field"><label>날짜</label><select class="inp" id="fDate">${DAYS.map(d=>{const L=dLabel(d.date);return `<option value="${d.date}" ${d.date===def?'selected':''}>${L.m}/${L.d} (${L.w})</option>`}).join('')}</select></div>
+ <div class="row2"><div class="field"><label>날짜</label><select class="inp" id="fDate"><option value="pre" ${def==='pre'?'selected':''}>출발 전 (사전 결제)</option>${DAYS.map(d=>{const L=dLabel(d.date);return `<option value="${d.date}" ${d.date===def?'selected':''}>${L.m}/${L.d} (${L.w})</option>`}).join('')}</select></div>
  <div class="field"><label>결제</label><div class="seg" id="fPay"><button class="on" data-v="card">카드</button><button data-v="cash">현금</button></div></div></div>
+ <div class="field" id="fPdateWrap" style="display:${def==='pre'?'block':'none'}"><label>결제한 날 (선택)</label><input class="inp" id="fPdate" type="date" max="2026-12-24"></div>
  <button class="btn primary block" data-act="saveExp">저장</button>`);
+ $('#fDate').addEventListener('change',()=>{$('#fPdateWrap').style.display=$('#fDate').value==='pre'?'block':'none'});
  const upd=()=>{const v=parseFloat($('#fAmt').value);const cur=segVal('fCur');$('#fConv').innerHTML=v>0?(cur==='KRW'?'≈ '+aud(v/rate,2):'≈ '+won0(v*rate))+' (1 AUD = '+rate.toLocaleString()+'원)':'&nbsp;'};
  $('#fAmt').addEventListener('input',upd);$('#fCur').addEventListener('click',()=>setTimeout(upd,0));
  setTimeout(()=>{const a=$('#fAmt');a&&a.focus()},250);
@@ -828,7 +833,8 @@ function saveExp(){
  const amt=parseFloat($('#fAmt').value);const desc=$('#fDesc').value.trim();
  if(!(amt>0)){toast('금액을 입력하세요');return}
  const cur=segVal('fCur');const a=cur==='KRW'?amt/rate:amt;lastCur=cur;
- expenses.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),date:$('#fDate').value,cat:segVal('fCat'),desc:desc||(CATS.find(c=>c.k===segVal('fCat')).l),amt,cur,aud:Math.round(a*100)/100,pay:segVal('fPay'),at:new Date().toISOString()});
+ const dsel=$('#fDate').value;
+ expenses.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),date:dsel,pdate:dsel==='pre'?($('#fPdate').value||''):'',cat:segVal('fCat'),desc:desc||(CATS.find(c=>c.k===segVal('fCat')).l),amt,cur,aud:Math.round(a*100)/100,pay:segVal('fPay'),at:new Date().toISOString()});
  saveAll();closeSheet();render();toast('저장했어요');
 }
 function sheetBudget(){
