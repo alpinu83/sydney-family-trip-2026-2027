@@ -549,6 +549,9 @@ let budget=Object.assign({},DEF_BUDGET,store.get('budget',{}));
 let expenses=store.get('expenses',[]);
 let checks=store.get('checks',{});
 let rate=store.get('rate',950);
+let budgetIn=store.get('budgetIn',{});
+let dispCur=store.get('dispCur','AUD');
+let lastCur=store.get('lastCur','AUD');
 const S={tab:store.get('tab','plan'),day:0,mapAll:false,expDay:null,overview:false};
 const STAYC={shangri:'#8C7E9C',furama:'#5E8682',crowne:'#B5806A'};
 
@@ -566,7 +569,13 @@ const tzDate=tz=>new Intl.DateTimeFormat('en-CA',{timeZone:tz,year:'numeric',mon
 const tzTime=tz=>new Intl.DateTimeFormat('en-GB',{timeZone:tz,hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date());
 function todayIdx(){const s=tzDate('Australia/Sydney');return DAYS.findIndex(d=>d.date===s)}
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),1800)}
-function saveAll(){store.set('budget',budget);store.set('expenses',expenses);store.set('checks',checks);store.set('rate',rate)}
+function saveAll(){store.set('budget',budget);store.set('expenses',expenses);store.set('checks',checks);store.set('rate',rate);store.set('budgetIn',budgetIn);store.set('dispCur',dispCur);store.set('lastCur',lastCur)}
+const won0=n=>Math.round(Number(n)||0).toLocaleString('ko-KR')+'원';
+const expK=e=>e.cur==='KRW'?(+e.amt||0):(+e.aud||0)*rate;
+const budK=k=>budgetIn[k]&&budgetIn[k].cur==='KRW'?(+budgetIn[k].amt||0):(+budget[k]||0)*rate;
+const money2=(a,k)=>dispCur==='KRW'?won0(k):aud(a);
+const money2b=(a,k)=>dispCur==='KRW'?aud(a):won0(k);
+function recalcFromKRW(){CATS.forEach(c=>{const b=budgetIn[c.k];if(b&&b.cur==='KRW')budget[c.k]=Math.round(b.amt/rate)});expenses.forEach(e=>{if(e.cur==='KRW')e.aud=Math.round(e.amt/rate*100)/100})}
 const totalBudget=()=>CATS.reduce((a,c)=>a+(Number(budget[c.k])||0),0);
 const totalSpent=()=>expenses.reduce((a,e)=>a+(Number(e.aud)||0),0);
 
@@ -753,21 +762,23 @@ function initMap(){
 /* ---------- money ---------- */
 function renderMoney(){
  const tb=totalBudget(),ts=totalSpent(),left=tb-ts,pct=tb?Math.min(100,ts/tb*100):0;
- const byCat={};expenses.forEach(e=>{byCat[e.cat]=(byCat[e.cat]||0)+(+e.aud||0)});
- const byDay={};expenses.forEach(e=>{byDay[e.date]=(byDay[e.date]||0)+(+e.aud||0)});
- let h=`<section class="sum"><small>지금까지 쓴 돈</small><div class="big">${aud(ts)}</div><small>약 ${krw(ts)}</small>
+ const tbK=CATS.reduce((a,c)=>a+budK(c.k),0),tsK=expenses.reduce((a,e)=>a+expK(e),0);
+ const byCat={},byCatK={},byDay={},byDayK={};
+ expenses.forEach(e=>{byCat[e.cat]=(byCat[e.cat]||0)+(+e.aud||0);byCatK[e.cat]=(byCatK[e.cat]||0)+expK(e);byDay[e.date]=(byDay[e.date]||0)+(+e.aud||0);byDayK[e.date]=(byDayK[e.date]||0)+expK(e)});
+ let h=`<div class="seg" style="margin-bottom:10px"><button class="${dispCur==='AUD'?'on':''}" data-disp="AUD">호주달러로 보기</button><button class="${dispCur==='KRW'?'on':''}" data-disp="KRW">원화로 보기</button></div>
+ <section class="sum"><small>지금까지 쓴 돈</small><div class="big">${money2(ts,tsK)}</div><small>약 ${money2b(ts,tsK)} · 환율 1 AUD = ${rate.toLocaleString()}원</small>
  <div class="bar"><i style="width:${pct}%"></i></div>
- <div class="sum-grid"><div>예산<b>${aud(tb)}</b></div><div>남은 예산<b style="${left<0?'color:#E3A397':''}">${aud(left)}</b></div><div>사용률<b>${tb?Math.round(ts/tb*100):0}%</b></div></div></section>
+ <div class="sum-grid"><div>예산<b>${money2(tb,tbK)}</b></div><div>남은 예산<b style="${left<0?'color:#E3A397':''}">${money2(left,tbK-tsK)}</b></div><div>사용률<b>${tb?Math.round(ts/tb*100):0}%</b></div></div></section>
  <div class="actions2"><button class="btn warm" data-act="add">${ico('plus')}지출 추가</button><button class="btn" data-act="budget">${ico('edit')}예산 수정</button></div>
  <div class="sec-title">카테고리별 (실제 / 예산)</div><section class="card">`;
- h+=CATS.map(c=>{const a=byCat[c.k]||0,b=+budget[c.k]||0,p=b?Math.min(100,a/b*100):(a?100:0);return `<div class="catrow"><div class="l"><span>${c.l}</span><span>${aud(a)} / ${aud(b)}</span></div><div class="cbar"><i class="${b&&a>b?'over':''}" style="width:${p}%;background:${c.c}"></i></div></div>`}).join('');
+ h+=CATS.map(c=>{const a=byCat[c.k]||0,b=+budget[c.k]||0,p=b?Math.min(100,a/b*100):(a?100:0);return `<div class="catrow"><div class="l"><span>${c.l}</span><span>${money2(a,byCatK[c.k]||0)} / ${money2(b,budK(c.k))}</span></div><div class="cbar"><i class="${b&&a>b?'over':''}" style="width:${p}%;background:${c.c}"></i></div></div>`}).join('');
  h+=`</section><div class="sec-title">날짜별</div><div class="daytot">`;
- h+=`<button class="dt ${S.expDay===null?'on':''}" data-expday=""><span>전체</span><b>${aud(ts)}</b></button>`;
- h+=DAYS.map(d=>{const L=dLabel(d.date);return `<button class="dt ${S.expDay===d.date?'on':''}" data-expday="${d.date}"><span>${L.m}/${L.d} ${L.w}</span><b>${aud(byDay[d.date]||0)}</b></button>`}).join('');
+ h+=`<button class="dt ${S.expDay===null?'on':''}" data-expday=""><span>전체</span><b>${money2(ts,tsK)}</b></button>`;
+ h+=DAYS.map(d=>{const L=dLabel(d.date);return `<button class="dt ${S.expDay===d.date?'on':''}" data-expday="${d.date}"><span>${L.m}/${L.d} ${L.w}</span><b>${money2(byDay[d.date]||0,byDayK[d.date]||0)}</b></button>`}).join('');
  h+=`</div><div class="sec-title">지출 내역${S.expDay?' · '+dLabel(S.expDay).m+'/'+dLabel(S.expDay).d:''}</div><section class="card" style="padding:4px 14px">`;
  const list=expenses.filter(e=>!S.expDay||e.date===S.expDay).slice().sort((a,b)=>(b.date+b.at).localeCompare(a.date+a.at));
- h+=list.length?list.map(e=>{const c=CATS.find(x=>x.k===e.cat)||CATS[8];const L=dLabel(e.date);return `<div class="exp"><span class="ci" style="background:${c.c}">${ico(c.ic)}</span><div class="t"><b>${esc(e.desc)}</b><small>${L.m}/${L.d} · ${c.l} · ${e.pay==='cash'?'현금':'카드'}</small></div><div class="amt">${aud(e.aud,2)}<small>${e.cur==='KRW'?Number(e.amt).toLocaleString('ko-KR')+'원':krw(e.aud)}</small></div><button class="icon-btn" data-del="${e.id}" aria-label="삭제">${ico('trash')}</button></div>`}).join(''):'<div class="empty">아직 기록이 없어요.<br>오른쪽 아래 + 버튼으로 바로 기록하세요.</div>';
- h+=`</section><p class="note">기록은 이 휴대폰의 브라우저에만 저장되고 인터넷에 올라가지 않습니다. 가끔 준비 탭에서 백업 파일을 저장해 두세요.</p>`;
+ h+=list.length?list.map(e=>{const c=CATS.find(x=>x.k===e.cat)||CATS[8];const L=dLabel(e.date);const orig=e.cur==='KRW'?won0(e.amt):aud(e.amt,2);const conv=e.cur==='KRW'?'≈ '+aud(e.aud,2):'≈ '+won0(e.aud*rate);return `<div class="exp"><span class="ci" style="background:${c.c}">${ico(c.ic)}</span><div class="t"><b>${esc(e.desc)}</b><small>${L.m}/${L.d} · ${c.l} · ${e.pay==='cash'?'현금':'카드'}</small></div><div class="amt">${orig}<small>${conv}</small></div><button class="icon-btn" data-del="${e.id}" aria-label="삭제">${ico('trash')}</button></div>`}).join(''):'<div class="empty">아직 기록이 없어요.<br>오른쪽 아래 + 버튼으로 바로 기록하세요.</div>';
+ h+=`</section><p class="note">원화로 입력한 금액은 원화 그대로 보관되고, 호주달러 환산은 준비 탭의 환율로 계산합니다. 기록은 이 휴대폰의 브라우저에만 저장되니 가끔 백업 파일을 저장해 두세요.</p>`;
  return h;
 }
 
@@ -802,25 +813,28 @@ function closeSheet(){$('#overlay').classList.remove('show');$('#sheet').innerHT
 function sheetAdd(){
  const ti=todayIdx();const def=(S.tab==='money'&&S.expDay)||(ti>=0?DAYS[ti].date:DAYS[S.day].date);
  openSheet(`<h3>지출 추가<button class="icon-btn" data-act="close">${ico('x')}</button></h3>
- <div class="field"><label>금액</label><div class="row2"><input class="inp" id="fAmt" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0"><div class="seg" id="fCur"><button class="on" data-v="AUD">A$</button><button data-v="KRW">원</button></div></div></div>
+ <div class="field"><label>금액</label><div class="row2"><input class="inp" id="fAmt" type="number" inputmode="decimal" step="any" min="0" placeholder="0"><div class="seg" id="fCur"><button class="${lastCur==='AUD'?'on':''}" data-v="AUD">A$</button><button class="${lastCur==='KRW'?'on':''}" data-v="KRW">원</button></div></div><small class="muted" id="fConv" style="display:block;margin-top:5px;font-size:12px">&nbsp;</small></div>
  <div class="field"><label>내용</label><input class="inp" id="fDesc" maxlength="60" placeholder="예: 울월스 과일·물"></div>
  <div class="field"><label>카테고리</label><div class="catgrid" id="fCat">${CATS.map((c,i)=>`<button data-v="${c.k}" class="${c.k==='food'?'on':''}">${c.l}</button>`).join('')}</div></div>
  <div class="row2"><div class="field"><label>날짜</label><select class="inp" id="fDate">${DAYS.map(d=>{const L=dLabel(d.date);return `<option value="${d.date}" ${d.date===def?'selected':''}>${L.m}/${L.d} (${L.w})</option>`}).join('')}</select></div>
  <div class="field"><label>결제</label><div class="seg" id="fPay"><button class="on" data-v="card">카드</button><button data-v="cash">현금</button></div></div></div>
  <button class="btn primary block" data-act="saveExp">저장</button>`);
+ const upd=()=>{const v=parseFloat($('#fAmt').value);const cur=segVal('fCur');$('#fConv').innerHTML=v>0?(cur==='KRW'?'≈ '+aud(v/rate,2):'≈ '+won0(v*rate))+' (1 AUD = '+rate.toLocaleString()+'원)':'&nbsp;'};
+ $('#fAmt').addEventListener('input',upd);$('#fCur').addEventListener('click',()=>setTimeout(upd,0));
  setTimeout(()=>{const a=$('#fAmt');a&&a.focus()},250);
 }
 function segVal(id){const b=document.querySelector('#'+id+' button.on');return b?b.dataset.v:null}
 function saveExp(){
  const amt=parseFloat($('#fAmt').value);const desc=$('#fDesc').value.trim();
  if(!(amt>0)){toast('금액을 입력하세요');return}
- const cur=segVal('fCur');const a=cur==='KRW'?amt/rate:amt;
+ const cur=segVal('fCur');const a=cur==='KRW'?amt/rate:amt;lastCur=cur;
  expenses.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),date:$('#fDate').value,cat:segVal('fCat'),desc:desc||(CATS.find(c=>c.k===segVal('fCat')).l),amt,cur,aud:Math.round(a*100)/100,pay:segVal('fPay'),at:new Date().toISOString()});
  saveAll();closeSheet();render();toast('저장했어요');
 }
 function sheetBudget(){
- openSheet(`<h3>예산 수정 (A$)<button class="icon-btn" data-act="close">${ico('x')}</button></h3>
- ${CATS.map(c=>`<div class="bud"><b>${c.l}</b><input class="inp" type="number" inputmode="decimal" min="0" data-bud="${c.k}" value="${budget[c.k]}"><small>${c.n}</small></div>`).join('')}
+ openSheet(`<h3>예산 수정<button class="icon-btn" data-act="close">${ico('x')}</button></h3>
+ <p class="note" style="margin:-4px 0 8px">항목마다 A$ 또는 원을 골라 입력하세요. 항공·숙소처럼 원화로 결제한 건 원화로 넣으면 편해요.</p>
+ ${CATS.map(c=>{const bi=budgetIn[c.k];const cur=bi?bi.cur:'AUD';const val=bi?bi.amt:budget[c.k];return `<div class="bud" style="grid-template-columns:1fr 120px 86px"><b>${c.l}</b><input class="inp" type="number" inputmode="decimal" step="any" min="0" data-bud="${c.k}" value="${val}"><div class="seg" data-budcur="${c.k}" style="padding:2px"><button class="${cur==='AUD'?'on':''}" data-v="AUD" style="padding:6px 4px">A$</button><button class="${cur==='KRW'?'on':''}" data-v="KRW" style="padding:6px 4px">원</button></div><small>${c.n}${cur==='KRW'?'':' · 약 '+won0((+budget[c.k]||0)*rate)}</small></div>`}).join('')}
  <button class="btn primary block" style="margin-top:14px" data-act="saveBud">저장</button>
  <button class="btn ghost block" data-act="resetBud">추정치로 되돌리기</button>`);
 }
@@ -868,7 +882,7 @@ function sheetLock(){
 
 /* ---------- export / import ---------- */
 function exportData(){
- const data={app:'sydney-trip-2026',exportedAt:new Date().toISOString(),budget,rate,expenses,checks};
+ const data={app:'sydney-trip-2026',exportedAt:new Date().toISOString(),budget,budgetIn,rate,expenses,checks,dispCur};
  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='sydney-trip-backup-'+tzDate('Asia/Seoul')+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
  toast('백업 파일을 저장했어요');
@@ -877,7 +891,7 @@ function importData(file){
  const r=new FileReader();
  r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.expenses))throw 0;
   if(!confirm('백업 파일로 지금 기록을 바꿀까요? (지출 '+d.expenses.length+'건)'))return;
-  expenses=d.expenses;budget=Object.assign({},DEF_BUDGET,d.budget||{});rate=d.rate||rate;checks=d.checks||checks;saveAll();render();toast('불러왔어요')}catch(e){toast('올바른 백업 파일이 아니에요')}};
+  expenses=d.expenses;budget=Object.assign({},DEF_BUDGET,d.budget||{});rate=d.rate||rate;checks=d.checks||checks;budgetIn=d.budgetIn||{};dispCur=d.dispCur||dispCur;saveAll();render();toast('불러왔어요')}catch(e){toast('올바른 백업 파일이 아니에요')}};
  r.readAsText(file);
 }
 
@@ -906,6 +920,7 @@ document.addEventListener('click',e=>{
  if(t.closest('#dday')){const ti=todayIdx();S.tab='plan';if(ti>=0){S.day=ti;S.overview=false}else{S.overview=true}render();return}
  if(t.closest('#fab')){sheetAdd();return}
  const ck=t.closest('[data-check]');if(ck){const id=ck.dataset.check;checks[id]=!checks[id];saveAll();ck.classList.toggle('done',checks[id]);return}
+ const dc=t.closest('[data-disp]');if(dc){dispCur=dc.dataset.disp;saveAll();render();return}
  const ed=t.closest('[data-expday]');if(ed){S.expDay=ed.dataset.expday||null;render();return}
  const del=t.closest('[data-del]');if(del){if(confirm('이 지출을 삭제할까요?')){expenses=expenses.filter(x=>x.id!==del.dataset.del);saveAll();render()}return}
  const sb=t.closest('.seg button,.catgrid button');if(sb){sb.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('on'));sb.classList.add('on');return}
@@ -915,10 +930,10 @@ document.addEventListener('click',e=>{
   case 'budget':sheetBudget();break;
   case 'close':closeSheet();break;
   case 'saveExp':saveExp();break;
-  case 'saveBud':document.querySelectorAll('[data-bud]').forEach(i=>budget[i.dataset.bud]=Math.max(0,parseFloat(i.value)||0));saveAll();closeSheet();render();toast('예산을 저장했어요');break;
-  case 'resetBud':budget=Object.assign({},DEF_BUDGET);saveAll();closeSheet();render();toast('추정치로 되돌렸어요');break;
+  case 'saveBud':document.querySelectorAll('[data-bud]').forEach(i=>{const k=i.dataset.bud;const v=Math.max(0,parseFloat(i.value)||0);const cb=document.querySelector('[data-budcur="'+k+'"] button.on');const cur=cb?cb.dataset.v:'AUD';budgetIn[k]={amt:v,cur};budget[k]=cur==='KRW'?Math.round(v/rate):v});saveAll();closeSheet();render();toast('예산을 저장했어요');break;
+  case 'resetBud':budget=Object.assign({},DEF_BUDGET);budgetIn={};saveAll();closeSheet();render();toast('추정치로 되돌렸어요');break;
   case 'rate':sheetRate();break;
-  case 'saveRate':{const v=parseFloat($('#fRate').value);if(v>0){rate=v;saveAll()}closeSheet();render();break}
+  case 'saveRate':{const v=parseFloat($('#fRate').value);if(v>0){rate=v;recalcFromKRW();saveAll()}closeSheet();render();break}
   case 'lock':sheetLock();break;
   case 'export':exportData();break;
   case 'import':$('#importFile').click();break;

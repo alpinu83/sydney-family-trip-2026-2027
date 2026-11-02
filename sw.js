@@ -1,4 +1,4 @@
-const CACHE = 'syd27-v12';
+const CACHE = 'syd27-v13';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icon.svg', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
