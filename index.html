@@ -688,7 +688,6 @@ function renderPlan(){
   if(it.p) prev=it;
  });
  h+='</section>';
- h+=dayMapHtml(d);
  if(d.tips) h+=`<div class="sec-title">오늘 체크</div><section class="card"><ul class="check">${d.tips.map((t,j)=>checkLi('d'+d.date+'-'+j,t)).join('')}</ul></section>`;
  h+=`<div class="daynav"><button class="btn" data-go="-1" ${S.day===0?'disabled style="opacity:.4"':''}>${ico('left')}이전 날</button><button class="btn" data-go="1" ${S.day===DAYS.length-1?'disabled style="opacity:.4"':''}>다음 날${ico('right')}</button></div>`;
  return h;
@@ -880,7 +879,6 @@ function render(){
  const m=$('#main');
  m.innerHTML=S.tab==='plan'?renderPlan():S.tab==='map'?renderMap():S.tab==='money'?renderMoney():renderPrep();
  if(S.tab==='map')initMap();
- if(S.tab==='plan'&&!S.overview)initDayMap();
  const fab=$('#fab');fab.innerHTML=ico('plus');fab.style.display=(S.tab==='plan'||S.tab==='money')?'flex':'none';
 }
 document.addEventListener('click',e=>{
