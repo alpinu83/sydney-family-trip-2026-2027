@@ -780,8 +780,8 @@ function renderMoney(){
  h+=DAYS.map(d=>{const L=dLabel(d.date);return `<button class="dt ${S.expDay===d.date?'on':''}" data-expday="${d.date}"><span>${L.m}/${L.d} ${L.w}</span><b>${money2(byDay[d.date]||0,byDayK[d.date]||0)}</b></button>`}).join('');
  h+=`</div><div class="sec-title">지출 내역${S.expDay?' · '+(S.expDay==='pre'?'출발 전':dLabel(S.expDay).m+'/'+dLabel(S.expDay).d):''}</div><section class="card" style="padding:4px 14px">`;
  const list=expenses.filter(e=>!S.expDay||e.date===S.expDay).slice().sort((a,b)=>(expSortKey(b)+b.at).localeCompare(expSortKey(a)+a.at));
- h+=list.length?list.map(e=>{const c=CATS.find(x=>x.k===e.cat)||CATS[8];const orig=e.cur==='KRW'?won0(e.amt):aud(e.amt,2);const conv=e.cur==='KRW'?'≈ '+aud(e.aud,2):'≈ '+won0(e.aud*rate);return `<div class="exp"><span class="ci" style="background:${c.c}">${ico(c.ic)}</span><div class="t"><b>${esc(e.desc)}</b><small>${expDateLabel(e)} · ${c.l} · ${e.pay==='cash'?'현금':'카드'}</small></div><div class="amt">${orig}<small>${conv}</small></div><button class="icon-btn" data-del="${e.id}" aria-label="삭제">${ico('trash')}</button></div>`}).join(''):'<div class="empty">아직 기록이 없어요.<br>오른쪽 아래 + 버튼으로 바로 기록하세요.</div>';
- h+=`</section><p class="note">원화로 입력한 금액은 원화 그대로 보관되고, 호주달러 환산은 준비 탭의 환율로 계산합니다. 기록은 이 휴대폰의 브라우저에만 저장되니 가끔 백업 파일을 저장해 두세요.</p>`;
+ h+=list.length?list.map(e=>{const c=CATS.find(x=>x.k===e.cat)||CATS[8];const orig=e.cur==='KRW'?won0(e.amt):aud(e.amt,2);const conv=e.cur==='KRW'?'≈ '+aud(e.aud,2):'≈ '+won0(e.aud*rate);return `<div class="exp" data-edit="${e.id}" style="cursor:pointer"><span class="ci" style="background:${c.c}">${ico(c.ic)}</span><div class="t"><b>${esc(e.desc)}</b><small>${expDateLabel(e)} · ${c.l} · ${e.pay==='cash'?'현금':'카드'}</small></div><div class="amt">${orig}<small>${conv}</small></div><button class="icon-btn" data-del="${e.id}" aria-label="삭제">${ico('trash')}</button></div>`}).join(''):'<div class="empty">아직 기록이 없어요.<br>오른쪽 아래 + 버튼으로 바로 기록하세요.</div>';
+ h+=`</section><p class="note">지출 내역을 누르면 수정할 수 있어요. 원화로 입력한 금액은 원화 그대로 보관되고, 호주달러 환산은 준비 탭의 환율로 계산합니다. 기록은 이 휴대폰의 브라우저에만 저장되니 가끔 백업 파일을 저장해 두세요.</p>`;
  return h;
 }
 
@@ -813,29 +813,36 @@ function renderPrep(){
 /* ---------- sheets ---------- */
 function openSheet(html){$('#sheet').innerHTML='<div class="grab"></div>'+html;$('#overlay').classList.add('show')}
 function closeSheet(){$('#overlay').classList.remove('show');$('#sheet').innerHTML=''}
-function sheetAdd(){
- const ti=todayIdx();const preTrip=tzDate('Asia/Seoul')<'2026-12-25';const def=(S.tab==='money'&&S.expDay)||(ti>=0?DAYS[ti].date:(preTrip?'pre':DAYS[S.day].date));
- openSheet(`<h3>지출 추가<button class="icon-btn" data-act="close">${ico('x')}</button></h3>
- <div class="field"><label>금액</label><div class="row2"><input class="inp" id="fAmt" type="number" inputmode="decimal" step="any" min="0" placeholder="0"><div class="seg" id="fCur"><button class="${lastCur==='AUD'?'on':''}" data-v="AUD">A$</button><button class="${lastCur==='KRW'?'on':''}" data-v="KRW">원</button></div></div><small class="muted" id="fConv" style="display:block;margin-top:5px;font-size:12px">&nbsp;</small></div>
- <div class="field"><label>내용</label><input class="inp" id="fDesc" maxlength="60" placeholder="예: 울월스 과일·물"></div>
- <div class="field"><label>카테고리</label><div class="catgrid" id="fCat">${CATS.map((c,i)=>`<button data-v="${c.k}" class="${c.k==='food'?'on':''}">${c.l}</button>`).join('')}</div></div>
+function sheetAdd(editId){
+ const E=editId?expenses.find(x=>x.id===editId):null;
+ const ti=todayIdx();const preTrip=tzDate('Asia/Seoul')<'2026-12-25';
+ const def=E?E.date:((S.tab==='money'&&S.expDay)||(ti>=0?DAYS[ti].date:(preTrip?'pre':DAYS[S.day].date)));
+ const cur0=E?E.cur:lastCur,cat0=E?E.cat:'food',pay0=E?E.pay:'card';
+ openSheet(`<h3>${E?'지출 수정':'지출 추가'}<button class="icon-btn" data-act="close">${ico('x')}</button></h3>
+ <input type="hidden" id="fId" value="${E?E.id:''}">
+ <div class="field"><label>금액</label><div class="row2"><input class="inp" id="fAmt" type="number" inputmode="decimal" step="any" min="0" placeholder="0" value="${E?E.amt:''}"><div class="seg" id="fCur"><button class="${cur0==='AUD'?'on':''}" data-v="AUD">A$</button><button class="${cur0==='KRW'?'on':''}" data-v="KRW">원</button></div></div><small class="muted" id="fConv" style="display:block;margin-top:5px;font-size:12px">&nbsp;</small></div>
+ <div class="field"><label>내용</label><input class="inp" id="fDesc" maxlength="60" placeholder="예: 울월스 과일·물" value="${E?esc(E.desc):''}"></div>
+ <div class="field"><label>카테고리</label><div class="catgrid" id="fCat">${CATS.map(c=>`<button data-v="${c.k}" class="${c.k===cat0?'on':''}">${c.l}</button>`).join('')}</div></div>
  <div class="row2"><div class="field"><label>날짜</label><select class="inp" id="fDate"><option value="pre" ${def==='pre'?'selected':''}>출발 전 (사전 결제)</option>${DAYS.map(d=>{const L=dLabel(d.date);return `<option value="${d.date}" ${d.date===def?'selected':''}>${L.m}/${L.d} (${L.w})</option>`}).join('')}</select></div>
- <div class="field"><label>결제</label><div class="seg" id="fPay"><button class="on" data-v="card">카드</button><button data-v="cash">현금</button></div></div></div>
- <div class="field" id="fPdateWrap" style="display:${def==='pre'?'block':'none'}"><label>결제한 날 (선택)</label><input class="inp" id="fPdate" type="date" max="2026-12-24"></div>
- <button class="btn primary block" data-act="saveExp">저장</button>`);
+ <div class="field"><label>결제</label><div class="seg" id="fPay"><button class="${pay0==='card'?'on':''}" data-v="card">카드</button><button class="${pay0==='cash'?'on':''}" data-v="cash">현금</button></div></div></div>
+ <div class="field" id="fPdateWrap" style="display:${def==='pre'?'block':'none'}"><label>결제한 날 (선택)</label><input class="inp" id="fPdate" type="date" max="2026-12-24" value="${E&&E.pdate?E.pdate:''}"></div>
+ <button class="btn primary block" data-act="saveExp">${E?'수정 저장':'저장'}</button>
+ ${E?`<button class="btn ghost block danger" style="margin-top:8px" data-del="${E.id}">${ico('trash')}이 지출 삭제</button>`:''}`);
  $('#fDate').addEventListener('change',()=>{$('#fPdateWrap').style.display=$('#fDate').value==='pre'?'block':'none'});
  const upd=()=>{const v=parseFloat($('#fAmt').value);const cur=segVal('fCur');$('#fConv').innerHTML=v>0?(cur==='KRW'?'≈ '+aud(v/rate,2):'≈ '+won0(v*rate))+' (1 AUD = '+rate.toLocaleString()+'원)':'&nbsp;'};
- $('#fAmt').addEventListener('input',upd);$('#fCur').addEventListener('click',()=>setTimeout(upd,0));
- setTimeout(()=>{const a=$('#fAmt');a&&a.focus()},250);
+ $('#fAmt').addEventListener('input',upd);$('#fCur').addEventListener('click',()=>setTimeout(upd,0));upd();
+ if(!E)setTimeout(()=>{const a=$('#fAmt');a&&a.focus()},250);
 }
 function segVal(id){const b=document.querySelector('#'+id+' button.on');return b?b.dataset.v:null}
 function saveExp(){
  const amt=parseFloat($('#fAmt').value);const desc=$('#fDesc').value.trim();
  if(!(amt>0)){toast('금액을 입력하세요');return}
  const cur=segVal('fCur');const a=cur==='KRW'?amt/rate:amt;lastCur=cur;
- const dsel=$('#fDate').value;
- expenses.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),date:dsel,pdate:dsel==='pre'?($('#fPdate').value||''):'',cat:segVal('fCat'),desc:desc||(CATS.find(c=>c.k===segVal('fCat')).l),amt,cur,aud:Math.round(a*100)/100,pay:segVal('fPay'),at:new Date().toISOString()});
- saveAll();closeSheet();render();toast('저장했어요');
+ const dsel=$('#fDate').value;const id=$('#fId').value;
+ const rec={date:dsel,pdate:dsel==='pre'?($('#fPdate').value||''):'',cat:segVal('fCat'),desc:desc||(CATS.find(c=>c.k===segVal('fCat')).l),amt,cur,aud:Math.round(a*100)/100,pay:segVal('fPay')};
+ if(id){const old=expenses.find(x=>x.id===id);if(old)Object.assign(old,rec,{edited:new Date().toISOString()})}
+ else expenses.push(Object.assign({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),at:new Date().toISOString()},rec));
+ saveAll();closeSheet();render();toast(id?'수정했어요':'저장했어요');
 }
 function sheetBudget(){
  openSheet(`<h3>예산 수정<button class="icon-btn" data-act="close">${ico('x')}</button></h3>
@@ -928,7 +935,8 @@ document.addEventListener('click',e=>{
  const ck=t.closest('[data-check]');if(ck){const id=ck.dataset.check;checks[id]=!checks[id];saveAll();ck.classList.toggle('done',checks[id]);return}
  const dc=t.closest('[data-disp]');if(dc){dispCur=dc.dataset.disp;saveAll();render();return}
  const ed=t.closest('[data-expday]');if(ed){S.expDay=ed.dataset.expday||null;render();return}
- const del=t.closest('[data-del]');if(del){if(confirm('이 지출을 삭제할까요?')){expenses=expenses.filter(x=>x.id!==del.dataset.del);saveAll();render()}return}
+ const del=t.closest('[data-del]');if(del){if(confirm('이 지출을 삭제할까요?')){expenses=expenses.filter(x=>x.id!==del.dataset.del);saveAll();closeSheet();render();toast('삭제했어요')}return}
+ const edt=t.closest('[data-edit]');if(edt){sheetAdd(edt.dataset.edit);return}
  const sb=t.closest('.seg button,.catgrid button');if(sb){sb.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('on'));sb.classList.add('on');return}
  const act=t.closest('[data-act]');if(!act)return;
  switch(act.dataset.act){
