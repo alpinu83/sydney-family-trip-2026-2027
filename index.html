@@ -103,6 +103,37 @@ h2,h3{margin:0;letter-spacing:-.01em}
 .check li.done .box:after{content:"";width:9px;height:5px;border:2px solid #F4F1EB;border-top:0;border-right:0;transform:rotate(-45deg) translate(1px,-1px)}
 .check li.done span{color:var(--muted);text-decoration:line-through}
 .check small{display:block;color:var(--muted);font-size:11.5px;text-decoration:none}
+/* overview */
+.ov-sum{background:var(--dark);color:var(--on-dark);border-radius:var(--r);padding:16px;box-shadow:var(--shadow)}
+.ov-sum small{color:var(--on-dark-muted);font-size:11px;letter-spacing:.12em;font-weight:700}
+.ov-sum h2{font-size:19px;margin:4px 0 2px}
+.ov-sum p{margin:0;color:var(--on-dark-muted);font-size:12.5px}
+.ov-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:14px;text-align:center}
+.ov-stats div{background:rgba(255,255,255,.08);border-radius:10px;padding:8px 2px;font-size:11px;color:var(--on-dark-muted)}
+.ov-stats b{display:block;font-size:16px;color:var(--on-dark)}
+.hbar{display:flex;gap:3px;margin-top:14px}
+.hbar div{border-radius:8px;padding:6px 7px;font-size:10.5px;line-height:1.3;color:#F6F3EE;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.hbar div b{display:block;font-size:11.5px}
+.ov-list{margin-top:12px;display:grid;gap:8px}
+.ov-row{display:grid;grid-template-columns:58px 1fr;gap:12px;align-items:stretch;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:10px 12px 10px 10px;box-shadow:var(--shadow);text-align:left;width:100%}
+.ov-row.today{border-color:var(--warm);box-shadow:inset 0 0 0 1px var(--warm),var(--shadow)}
+.ov-date{border-radius:12px;background:var(--surface2);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 0}
+.ov-date span{font-size:11px;color:var(--muted)}
+.ov-date b{font-size:17px;line-height:1.2}
+.ov-date em{font-style:normal;font-size:10px;font-weight:700;color:var(--accent-ink)}
+.ov-row.travel .ov-date{background:var(--warm-soft)}
+.ov-row.travel .ov-date em{color:#8A5A45}
+.ov-body{min-width:0}
+.ov-body h3{font-size:14.5px;margin:1px 0 5px;display:flex;align-items:center;gap:6px}
+.ov-body h3 .i{color:var(--muted);margin-left:auto;width:15px;height:15px}
+.hls{display:flex;flex-wrap:wrap;gap:5px}
+.hl{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;padding:3px 8px;border-radius:999px;background:var(--surface2);color:#4E5552;max-width:100%}
+.hl .i{width:12px;height:12px}
+.hl.must{background:var(--warm-soft);color:#8A5A45}
+.ov-stay{display:flex;align-items:center;gap:5px;margin-top:6px;font-size:11.5px;color:var(--muted)}
+.ov-stay i{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11.5px;color:var(--muted);margin:10px 4px 0}
+.legend span{display:inline-flex;align-items:center;gap:5px}
 .daynav{display:flex;gap:10px;margin-top:16px}
 .daynav .btn{flex:1}
 /* map */
@@ -358,7 +389,7 @@ const DAYS=[
 {date:'2026-12-28',tag:'Day 3',title:'본다이 비치 · 숙소 이동',sum:'오전에 짐 옮기고 본다이 아이스버그 수영, 저녁은 달링하버',stay:'Furama Darling Harbour',stayP:'furama',stayN:'1/3박',items:[
  {t:'09:00',k:'car',title:'체크아웃 → Furama로 짐 이동',n:'택시 한 번에 짐을 옮기고 프런트에 맡기기',p:'furama',go:'택시 · 약 10~15분',mode:'driving',c:'약 $25'},
  {t:'10:00',k:'move',title:'본다이로 이동',n:'Town Hall역에서 기차로 Bondi Junction, 333 버스로 해변까지',p:'bondi',go:'기차 + 333 버스 · 약 40분',mode:'transit'},
- {t:'11:00',k:'swim',title:'Bondi Icebergs 수영',n:'바다 옆 바닷물 수영장. 파도가 세면 운영이 바뀔 수 있고, 아이 동반 규정은 현장에서 확인',p:'icebergs',c:'입장료 별도'},
+ {t:'11:00',k:'swim',hl:1,title:'Bondi Icebergs 수영',n:'바다 옆 바닷물 수영장. 파도가 세면 운영이 바뀔 수 있고, 아이 동반 규정은 현장에서 확인',p:'icebergs',c:'입장료 별도'},
  {t:'12:30',k:'food',title:'본다이 점심',n:'피시앤칩스나 해변 카페. 햇볕이 강하니 그늘 자리',p:'bondi'},
  {t:'13:30',k:'see',title:'본다이 → 브론테 해안 산책',n:'약 2.5km, 쉬엄쉬엄 1시간. 더우면 중간에서 돌아오기',p:'bronte',go:'도보 · 약 1시간',mode:'walking'},
  {t:'15:30',k:'move',title:'시내로 귀환',p:'furama',go:'버스 + 기차 · 약 45분',mode:'transit'},
@@ -372,7 +403,7 @@ const DAYS=[
  {t:'10:00',k:'star',title:'Oakvale Wildlife Park',n:'코알라·캥거루를 가까이서. 예약한 상품에 Oakvale이 포함됐는지 꼭 확인',p:'oakvale'},
  {t:'12:00',k:'food',title:'점심 (상품 포함 여부 확인)',p:'oakvale'},
  {t:'13:00',k:'star',title:'애나베이 사막 4WD · 샌드보딩',n:'높이 30m 안팎 모래언덕을 보드로 미끄러져 내려오기. 마스크·양말 있으면 편함',p:'annaBay'},
- {t:'14:30',k:'ferry',title:'넬슨베이 돌고래 크루즈 (옵션)',n:'예약할 때 돌고래 크루즈 옵션을 꼭 추가. 따뜻한 날엔 배 뒤 그물 물놀이 가능',p:'nelson',c:'옵션 추가 요금'},
+ {t:'14:30',k:'ferry',hl:1,title:'넬슨베이 돌고래 크루즈 (옵션)',n:'예약할 때 돌고래 크루즈 옵션을 꼭 추가. 따뜻한 날엔 배 뒤 그물 물놀이 가능',p:'nelson',c:'옵션 추가 요금'},
  {t:'19:30',k:'move',title:'시드니 도착 · 숙소 복귀',n:'도착 시간은 교통 상황에 따라 달라짐',p:'furama'},
  {t:'20:00',k:'food',title:'숙소 근처에서 간단한 저녁',p:'darling'}
 ],tips:['상품 포함 내역 확인: Oakvale · 점심 · 돌고래 크루즈 옵션','수영복·여벌옷·수건·모래 털 지퍼백','마스크·양말(샌드보딩), 멀미약(버스+배)','선크림·모자·물 넉넉히']},
@@ -468,7 +499,8 @@ let budget=Object.assign({},DEF_BUDGET,store.get('budget',{}));
 let expenses=store.get('expenses',[]);
 let checks=store.get('checks',{});
 let rate=store.get('rate',950);
-const S={tab:store.get('tab','plan'),day:0,mapAll:false,expDay:null};
+const S={tab:store.get('tab','plan'),day:0,mapAll:false,expDay:null,overview:false};
+const STAYC={shangri:'#8C7E9C',furama:'#5E8682',crowne:'#B5806A'};
 
 /* ---------- helpers ---------- */
 const $=s=>document.querySelector(s);
@@ -502,7 +534,8 @@ function renderHeader(){
  if(!showChips){ch.innerHTML='';return}
  let h='';
  if(S.tab==='map') h+=`<button class="chip all ${S.mapAll?'on':''}" data-all="1"><span>보기</span><b>전체</b></button>`;
- h+=DAYS.map((d,i)=>{const L=dLabel(d.date);const on=(S.tab==='map'&&S.mapAll)?false:i===S.day;return `<button class="chip ${on?'on':''} ${i===ti?'today':''}" data-day="${i}"><span>${L.m}/${L.d}</span><b>${L.w}</b></button>`}).join('');
+ if(S.tab==='plan') h+=`<button class="chip all ${S.overview?'on':''}" data-ov="1"><span>10일</span><b>전체</b></button>`;
+ h+=DAYS.map((d,i)=>{const L=dLabel(d.date);const on=((S.tab==='map'&&S.mapAll)||(S.tab==='plan'&&S.overview))?false:i===S.day;return `<button class="chip ${on?'on':''} ${i===ti?'today':''}" data-day="${i}"><span>${L.m}/${L.d}</span><b>${L.w}</b></button>`}).join('');
  ch.innerHTML=h;
  const on=ch.querySelector('.chip.on');if(on) on.scrollIntoView({inline:'center',block:'nearest'});
 }
@@ -529,7 +562,29 @@ function itemHtml(it){
   </div></article>`;
 }
 function checkLi(id,text,sub,url){const on=!!checks[id];return `<li class="${on?'done':''}" data-check="${id}"><i class="box"></i><span>${esc(text)}${sub?`<small>${esc(sub)}${url?` · <a href="${url}" target="_blank" rel="noopener" data-stop="1">링크</a>`:''}</small>`:''}</span></li>`}
+function renderOverview(){
+ const ti=todayIdx();
+ const segs=[{n:'기내',c:'#9AA19B',k:1},{n:'Shangri-La',c:STAYC.shangri,k:2},{n:'Furama',c:STAYC.furama,k:3},{n:'Crowne Plaza',c:STAYC.crowne,k:3}];
+ const mustN=DAYS.reduce((a,d)=>a+d.items.filter(x=>x.must).length,0);
+ let h=`<section class="ov-sum"><small>전체 일정</small><h2>12/25 (금) – 1/3 (일)</h2><p>인천 20:00 출발 · 시드니 10:20 출발, 인천 19:00 도착</p>
+ <div class="ov-stats"><div><b>8박</b>10일</div><div><b>3곳</b>숙소</div><div><b>3개</b>하루 투어</div><div><b>${mustN}건</b>예약 필요</div></div>
+ <div class="hbar">${segs.map(s=>`<div style="flex:${s.k};background:${s.c}"><b>${s.n}</b>${s.k}${s.n==='기내'?'박':'박'}</div>`).join('')}</div></section>`;
+ h+='<div class="ov-list">';
+ h+=DAYS.map((d,i)=>{
+  const L=dLabel(d.date);const travel=d.tag==='출국'||d.tag==='귀국';
+  let hl=d.items.filter(x=>(x.k==='star'||x.must||x.hl)&&!x.opt);
+  if(!hl.length) hl=d.items.filter(x=>x.k==='fly'||x.k==='see').slice(0,2);
+  const seen=new Set();hl=hl.filter(x=>{const key=x.title;if(seen.has(key))return false;seen.add(key);return true}).slice(0,4);
+  const short=t=>t.replace(/\s*\(.*?\)\s*/g,' ').trim();
+  return `<button class="ov-row ${travel?'travel':''} ${i===ti?'today':''}" data-day="${i}"><div class="ov-date"><span>${L.m}/${L.d}</span><b>${L.w}</b><em>${d.tag}</em></div>
+  <div class="ov-body"><h3>${esc(d.title)}${ico('right')}</h3><div class="hls">${hl.map(x=>`<span class="hl ${x.must?'must':''}">${ico(x.k)}${esc(short(x.title))}</span>`).join('')}</div>
+  ${d.stay?`<div class="ov-stay"><i style="background:${STAYC[d.stayP]||'#999'}"></i>${esc(d.stay)} ${d.stayN||''}</div>`:''}</div></button>`;
+ }).join('');
+ h+='</div><div class="legend"><span><span class="hl must" style="padding:1px 7px">주황</span>미리 예약이 필요한 일정</span><span>줄을 누르면 그날 상세 일정</span></div>';
+ return h;
+}
 function renderPlan(){
+ if(S.overview) return renderOverview();
  const d=DAYS[S.day];const L=dLabel(d.date);const ti=todayIdx();
  let h='';
  if(ti===S.day) h+=nextUp(d);
@@ -740,10 +795,11 @@ document.addEventListener('click',e=>{
  const t=e.target;
  if(t.closest('[data-stop]'))return;
  const tab=t.closest('[data-tab]');if(tab){S.tab=tab.dataset.tab;store.set('tab',S.tab);render();scrollTo(0,0);return}
- const day=t.closest('[data-day]');if(day){S.day=+day.dataset.day;S.mapAll=false;render();if(S.tab==='plan')scrollTo({top:0,behavior:'smooth'});return}
+ const day=t.closest('[data-day]');if(day){S.day=+day.dataset.day;S.mapAll=false;S.overview=false;render();if(S.tab==='plan')scrollTo({top:0,behavior:'smooth'});return}
+ if(t.closest('[data-ov]')){S.overview=true;render();scrollTo({top:0,behavior:'smooth'});return}
  if(t.closest('[data-all]')){S.mapAll=true;render();return}
  const go=t.closest('[data-go]');if(go&&!go.disabled){S.day=Math.max(0,Math.min(DAYS.length-1,S.day+ +go.dataset.go));render();scrollTo({top:0,behavior:'smooth'});return}
- if(t.closest('#dday')){const ti=todayIdx();if(ti>=0){S.day=ti;S.tab='plan';render()}return}
+ if(t.closest('#dday')){const ti=todayIdx();S.tab='plan';if(ti>=0){S.day=ti;S.overview=false}else{S.overview=true}render();return}
  if(t.closest('#fab')){sheetAdd();return}
  const ck=t.closest('[data-check]');if(ck){const id=ck.dataset.check;checks[id]=!checks[id];saveAll();ck.classList.toggle('done',checks[id]);return}
  const ed=t.closest('[data-expday]');if(ed){S.expDay=ed.dataset.expday||null;render();return}
@@ -769,11 +825,11 @@ $('#overlay').addEventListener('click',e=>{if(e.target.id==='overlay')closeSheet
 /* swipe between days on plan */
 let sx=0,sy=0;
 $('#main').addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
-$('#main').addEventListener('touchend',e=>{if(S.tab!=='plan')return;const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(Math.abs(dx)>70&&Math.abs(dy)<40){const n=S.day+(dx<0?1:-1);if(n>=0&&n<DAYS.length){S.day=n;render();scrollTo({top:0})}}},{passive:true});
+$('#main').addEventListener('touchend',e=>{if(S.tab!=='plan'||S.overview)return;const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(Math.abs(dx)>70&&Math.abs(dy)<40){const n=S.day+(dx<0?1:-1);if(n>=0&&n<DAYS.length){S.day=n;render();scrollTo({top:0})}}},{passive:true});
 
 /* ---------- start ---------- */
 (function start(){
- const ti=todayIdx();S.day=ti>=0?ti:store.get('day',0);
+ const ti=todayIdx();S.day=ti>=0?ti:store.get('day',0);S.overview=ti<0;
  window.addEventListener('pagehide',()=>store.set('day',S.day));
  render();
  if(store.get('pin',null)&&sessionStorage.getItem('syd27_ok')!=='1')showLock();
