@@ -341,6 +341,8 @@ const P={
  featherdale:{n:'Featherdale Sydney Wildlife Park',q:'Featherdale Sydney Wildlife Park Doonside',ll:[-33.7680,150.8880]},
  echo:{n:'Echo Point · 세 자매봉',q:'Echo Point Lookout Katoomba',ll:[-33.7320,150.3120]},
  scenic:{n:'Scenic World',q:'Scenic World Katoomba',ll:[-33.7280,150.3010]},
+ observ:{n:'옵저버토리 힐 (Observatory Hill)',q:'Observatory Hill Park Sydney',ll:[-33.8593,151.2046]},
+ dq:{n:'달링 쿼터 놀이터',q:'Darling Quarter Playground',ll:[-33.8748,151.2004]},
  nsop:{n:'North Sydney Olympic Pool',q:'North Sydney Olympic Pool Milsons Point',ll:[-33.8486,151.2106]},
  bridge:{n:'하버브리지 보행로',q:'Sydney Harbour Bridge pedestrian walkway',ll:[-33.8523,151.2108]},
  mascotC:{n:'Mascot Central 울월스 (Mascot역 앞)',q:'Woolworths Mascot 55 Church Ave',ll:[-33.9218,151.1873]},
@@ -396,10 +398,12 @@ const DAYS=[
 {date:'2026-12-27',tag:'Day 2',title:'타롱가 동물원',sum:'페리 타고 동물원으로. 오전에 동물이 가장 활발합니다',stay:'Shangri-La Sydney',stayP:'shangri',stayN:'2/2박',items:[
  {t:'08:40',k:'move',title:'Circular Quay 부두로',n:'물, 모자, 선크림, 전날 산 과일과 샌드위치 챙기기',p:'quay',go:'도보 약 10분',mode:'walking'},
  {t:'09:00',k:'ferry',title:'F2 페리 → Taronga Zoo 부두',n:'약 12분, 30분 간격. 하버 경치가 좋아 오른쪽 자리 추천',p:'taronga',go:'F2 페리 · 약 12분',mode:'transit'},
- {t:'09:30',k:'star',title:'Taronga Zoo',n:'개장 09:30~17:00(9~4월). 호주 동물 구역과 키퍼 토크 위주로. 동물 체험은 09:00 전 도착해야 예약 가능',p:'taronga',url:U.taronga,c:'가족권 $144~'},
+ {t:'09:30',k:'star',title:'Taronga Zoo',n:'개장 09:30~17:00(9~4월). 호주 동물 구역, 물개·새 쇼, 키퍼 토크 시간표를 보고 동선 짜기. 동물 체험은 09:00 전 도착해야 예약 가능. 오후까지 여유 있게 둘러보기',p:'taronga',url:U.taronga,c:'가족권 $144~'},
  {t:'12:00',k:'food',title:'동물원 피크닉 점심',n:'싸 온 도시락으로 식비 절약. 하버가 보이는 잔디밭 추천',p:'taronga'},
- {t:'15:30',k:'ferry',title:'페리로 Circular Quay 귀환',p:'quay',go:'F2 페리 · 약 12분',mode:'transit'},
- {t:'19:00',k:'food',title:'The Rocks 저녁',p:'rocks'}
+ {t:'16:30',k:'ferry',title:'페리로 Circular Quay 귀환',p:'quay',go:'F2 페리 · 약 12분',mode:'transit'},
+{t:'17:00',k:'stay',title:'호텔 휴식 · 샤워',n:'동물원에서 많이 걸었으니 잠깐 쉬기',p:'shangri'},
+ {t:'18:15',k:'see',title:'옵저버토리 힐 하버 전망',n:'호텔에서 걸어서 약 5분, 무료. 언덕 위 공원에서 하버브리지가 정면으로 보이는 사진 명소. 아이들 뛰어놀기 좋은 잔디밭',p:'observ',go:'도보 약 5분',mode:'walking'},
+  {t:'19:00',k:'food',title:'The Rocks 저녁',p:'rocks'}
 ],tips:['Taronga 가족권 온라인 구매 (현장보다 저렴)','당일 키퍼 토크 시간표 확인 후 동선 짜기','교통카드 탭 잊지 않기 (내릴 때도)']},
 
 {date:'2026-12-28',tag:'Day 3',hol:'공휴일 · 박싱데이 대체',title:'본다이 비치 · 숙소 이동',sum:'오전에 짐 옮기고 본다이 아이스버그 수영, 저녁은 달링하버',stay:'Furama Darling Harbour',stayP:'furama',stayN:'1/3박',items:[
@@ -410,7 +414,8 @@ const DAYS=[
  {t:'13:30',k:'see',title:'본다이 → 브론테 해안 산책',n:'약 2.5km, 쉬엄쉬엄 1시간. 더우면 중간에서 돌아오기',p:'bronte',go:'도보 · 약 1시간',mode:'walking'},
  {t:'15:30',k:'move',title:'시내로 귀환',p:'furama',go:'버스 + 기차 · 약 45분',mode:'transit'},
  {t:'16:30',k:'stay',title:'Furama 체크인 · 휴식',p:'furama'},
- {t:'18:30',k:'food',title:'달링하버 야경 · 저녁',p:'darling',go:'도보 약 10분',mode:'walking'}
+{t:'17:00',k:'see',title:'달링 쿼터 놀이터',n:'Furama에서 걸어서 약 10분, 무료. 시드니에서 손꼽히는 큰 놀이터로 물놀이 구역도 있어 옷이 젖을 수 있음. 여벌옷 챙기기',p:'dq',go:'도보 약 10분',mode:'walking'},
+ {t:'18:00',k:'food',title:'달링하버 이른 저녁 · 일찍 자기',n:'내일 06:35 출발이라 일찍 먹고 일찍 자기. 내일 아침거리도 미리 사 두기',p:'darling'}
 ],tips:['대체 공휴일이라 본다이가 매우 붐빔, 일찍 출발','수영복·래시가드·수건·아쿠아슈즈','해변 날씨·파도 경보 확인','내일 포트스테판 투어 집결 시간·장소 확인 (일찍 자기)']},
 
 {date:'2026-12-29',tag:'Day 4',title:'포트스테판 한국어 투어',sum:'06:50 씨라이프 수족관 옆 출발(19:30 복귀). Oakvale 동물원, 와이너리 점심, 돌고래 크루즈, 사막 샌드보딩',stay:'Furama Darling Harbour',stayP:'furama',stayN:'2/3박',items:[
