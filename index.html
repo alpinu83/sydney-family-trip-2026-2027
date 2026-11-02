@@ -399,7 +399,6 @@ const DAYS=[
  {t:'09:30',k:'star',title:'Taronga Zoo',n:'개장 09:30~17:00(9~4월). 호주 동물 구역과 키퍼 토크 위주로. 동물 체험은 09:00 전 도착해야 예약 가능',p:'taronga',url:U.taronga,c:'가족권 $144~'},
  {t:'12:00',k:'food',title:'동물원 피크닉 점심',n:'싸 온 도시락으로 식비 절약. 하버가 보이는 잔디밭 추천',p:'taronga'},
  {t:'15:30',k:'ferry',title:'페리로 Circular Quay 귀환',p:'quay',go:'F2 페리 · 약 12분',mode:'transit'},
- {t:'17:00',k:'show',title:'오페라하우스 공연 보기',n:'Great Opera Hits(약 90분, 14:00/17:00). 아이들이 피곤하면 생략',p:'opera',url:U.operaHits,opt:1,c:'1인 $69~'},
  {t:'19:00',k:'food',title:'The Rocks 저녁',p:'rocks'}
 ],tips:['Taronga 가족권 온라인 구매 (현장보다 저렴)','당일 키퍼 토크 시간표 확인 후 동선 짜기','교통카드 탭 잊지 않기 (내릴 때도)']},
 
@@ -466,7 +465,6 @@ const DAYS=[
  {t:'11:45',k:'see',title:'하버브리지 걸어서 건너기',n:'더 록스에서 다리 위 보행로로 올라가 밀슨스 포인트까지 약 25분(무료). 오페라하우스가 내려다보이는 최고의 사진 포인트',p:'bridge',go:'도보 약 25분',mode:'walking',hl:1},
  {t:'12:30',k:'swim',title:'노스시드니 올림픽 수영장',n:'하버브리지 바로 아래 50m 야외 온수풀, 어린이풀·물놀이터, 젤라또 바. 2026년 8월 재개장. 토요일 07:00~19:00(풀은 18:30까지). 현금 불가, 카드만',p:'nsop',url:U.nsop,hl:1,c:'가족(2+2) $31.70'},
  {t:'13:30',k:'food',title:'수영장 카페에서 점심',p:'nsop'},
- {t:'14:00',k:'show',title:'Storytime Ballet: 신데렐라',n:'수영 대신 초3이 원하면. 오페라하우스, 3세 이상 아이용 1시간 이내. 1인 $59~88',p:'opera',url:U.ballet,opt:1},
  {t:'15:30',k:'move',title:'밀슨스 포인트역 → Mascot역',n:'기차로 시내를 지나 공항 방향으로(Central에서 공항선 환승)',p:'mascotC',go:'기차 · 약 30분',mode:'transit'},
  {t:'16:15',k:'shop',title:'Mascot 울월스 장보기',n:'Mascot역 바로 앞 Mascot Central 쇼핑가(매일 07:00~22:00). 내일 아침·귀국 전 간식. 호텔까지 걸어서 몇 분',p:'mascotC',c:'약 $40'},
  {t:'17:30',k:'stay',title:'호텔 · 짐 싸기',n:'여권, 탑승권, 면세 환급 영수증은 한 파우치에. 젖은 수영복은 지퍼백, 수하물 무게 확인',p:'crowne'},
@@ -489,11 +487,11 @@ const CATS=[
  {k:'transport',l:'교통',c:'#7D869C',ic:'move',n:'택시 4~5회 + 대중교통(기차·페리·버스)'},
  {k:'food',l:'외식',c:'#B5806A',ic:'food',n:'하루 약 $170 × 8일 (점심은 도시락 위주)'},
  {k:'grocery',l:'장보기',c:'#9C8A5C',ic:'shop',n:'아침·피크닉·간식 (3~4회)'},
- {k:'show',l:'공연·건물투어',c:'#A2707C',ic:'show',n:'오페라하우스 한국어 투어 + 선택 공연 1회 기준'},
+ {k:'show',l:'오페라하우스 투어',c:'#A2707C',ic:'show',n:'오페라하우스 한국어 건물 투어 4인 기준'},
  {k:'shopping',l:'쇼핑',c:'#A08E7B',ic:'shop',n:'기념품·선물'},
  {k:'etc',l:'예비·기타',c:'#858A82',ic:'tip',n:'약 5% 여유분'}
 ];
-const DEF_BUDGET={flight:8400,hotel:3340,tour:1480,transport:450,food:1360,grocery:300,show:300,shopping:600,etc:700};
+const DEF_BUDGET={flight:8400,hotel:3340,tour:1480,transport:450,food:1360,grocery:300,show:150,shopping:600,etc:700};
 
 const TODO=[
  {id:'eta',t:'호주 ETA(전자여행허가) 4인 신청·승인',d:'출발 전'},
@@ -505,7 +503,6 @@ const TODO=[
  {id:'bm',t:'12/30 블루마운틴 + 페더데일 오전 투어 예약 (시닉월드 포함 패키지 B)',d:'연말 성수기, 일찍',u:U.bmTour},
  {id:'star',t:'1/1 블루마운틴 "선셋+별보기" 예약 (동물원 없는 상품, 1/1 예약 가능 여부)',d:'연말 성수기, 일찍',u:U.starTour},
  {id:'opal',t:'교통카드: 어른은 컨택리스 카드, 아이들은 Child Opal',d:'도착 후'},
- {id:'show',t:'선택 공연 예매 여부 결정',d:'출발 전'},
  {id:'ins',t:'여행자보험 가입',d:'출발 전'},
  {id:'htl',t:'숙소 3곳 확인서 저장 · 얼리 체크인 요청',d:'출발 전'},
  {id:'sim',t:'데이터 로밍 또는 eSIM',d:'출발 전'}
