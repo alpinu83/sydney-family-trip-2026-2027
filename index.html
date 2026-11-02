@@ -552,6 +552,8 @@ let rate=store.get('rate',950);
 let budgetIn=store.get('budgetIn',{});
 let dispCur=store.get('dispCur','AUD');
 let lastCur=store.get('lastCur','AUD');
+let tombs=store.get('tombs',{}),checksU=store.get('checksU',{}),budgetU=store.get('budgetU',0),rateU=store.get('rateU',0);
+let syncCfg=store.get('sync',null),syncInfo=store.get('syncInfo',{});
 const S={tab:store.get('tab','plan'),day:0,mapAll:false,expDay:null,overview:false};
 const STAYC={shangri:'#8C7E9C',furama:'#5E8682',crowne:'#B5806A'};
 
@@ -569,7 +571,66 @@ const tzDate=tz=>new Intl.DateTimeFormat('en-CA',{timeZone:tz,year:'numeric',mon
 const tzTime=tz=>new Intl.DateTimeFormat('en-GB',{timeZone:tz,hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date());
 function todayIdx(){const s=tzDate('Australia/Sydney');return DAYS.findIndex(d=>d.date===s)}
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),1800)}
-function saveAll(){store.set('budget',budget);store.set('expenses',expenses);store.set('checks',checks);store.set('rate',rate);store.set('budgetIn',budgetIn);store.set('dispCur',dispCur);store.set('lastCur',lastCur)}
+function saveLocal(){store.set('budget',budget);store.set('expenses',expenses);store.set('checks',checks);store.set('rate',rate);store.set('budgetIn',budgetIn);store.set('dispCur',dispCur);store.set('lastCur',lastCur);store.set('tombs',tombs);store.set('checksU',checksU);store.set('budgetU',budgetU);store.set('rateU',rateU)}
+function saveAll(){saveLocal();scheduleSync()}
+/* ---------- family sync (Google Apps Script) ---------- */
+let syncTimer=null,syncBusy=false,syncDirty=false;
+function scheduleSync(){if(!syncCfg)return;clearTimeout(syncTimer);syncTimer=setTimeout(()=>doSync(),1200)}
+function localState(){
+ const ex={};expenses.forEach(e=>{ex[e.id]=Object.assign({},e,{u:e.u||Date.parse(e.at)||1})});
+ Object.keys(tombs).forEach(id=>{const u=tombs[id];if(!ex[id]||ex[id].u<u)ex[id]={id,del:true,u}});
+ const ck={};Object.keys(Object.assign({},checks,checksU)).forEach(k=>{ck[k]={v:!!checks[k],u:checksU[k]||1}});
+ return {expenses:ex,budget:{budget,budgetIn,u:budgetU||1},rate:{v:rate,u:rateU||1},checks:ck};
+}
+function applyServer(st){
+ if(!st)return;
+ const ex=[],tb={};Object.keys(st.expenses||{}).forEach(id=>{const e=st.expenses[id];if(!e)return;if(e.del)tb[id]=e.u;else ex.push(e)});
+ expenses=ex;tombs=tb;
+ if(st.budget){budget=Object.assign({},DEF_BUDGET,st.budget.budget||{});budgetIn=st.budget.budgetIn||{};budgetU=st.budget.u||0}
+ if(st.rate&&st.rate.v){rate=st.rate.v;rateU=st.rate.u||0}
+ const ck={},cu={};Object.keys(st.checks||{}).forEach(k=>{const o=st.checks[k];if(o){ck[k]=!!o.v;cu[k]=o.u||0}});checks=ck;checksU=cu;
+ recalcFromKRW();saveLocal();
+}
+async function syncCall(cfg,body){
+ const res=await fetch(cfg.url,{method:'POST',body:JSON.stringify(Object.assign({code:cfg.code},body)),redirect:'follow'});
+ const j=await res.json();if(!j.ok)throw new Error(j.error||'error');return j;
+}
+async function doSync(manual){
+ if(!syncCfg)return;
+ if(syncBusy){syncDirty=true;return}
+ if(!navigator.onLine){syncInfo.err='offline';store.set('syncInfo',syncInfo);if(manual)toast('인터넷 연결 후 자동으로 맞춰져요');return}
+ syncBusy=true;syncDirty=false;
+ try{
+  const j=await syncCall(syncCfg,{action:'sync',state:localState()});
+  if(!syncDirty){applyServer(j.state);const ov=$('#overlay').classList.contains('show');if(!ov)render()}
+  syncInfo={last:Date.now(),err:''};store.set('syncInfo',syncInfo);
+  if(manual)toast('공유 기록과 맞췄어요');
+ }catch(e){syncInfo.err=String(e.message||e);store.set('syncInfo',syncInfo);if(manual)toast(e.message==='wrong_code'?'가족 코드가 맞지 않아요':'동기화 실패, 잠시 후 다시 시도해요')}
+ finally{syncBusy=false;if(syncDirty)scheduleSync();updSyncBadge()}
+}
+function syncAgo(){if(!syncInfo.last)return '아직 안 맞춤';const m=Math.round((Date.now()-syncInfo.last)/60000);return m<1?'방금 맞춤':m<60?m+'분 전 맞춤':Math.round(m/60)+'시간 전 맞춤'}
+function updSyncBadge(){const b=document.getElementById('syncBadge');if(b)b.textContent=syncCfg?(syncInfo.err&&syncInfo.err!=='offline'?'동기화 확인 필요':syncInfo.err==='offline'?'오프라인 · 연결되면 맞춤':'공유 중 · '+syncAgo()):''}
+function sheetSync(prefillUrl){
+ const c=syncCfg||{};
+ openSheet(`<h3>가족 공유 동기화<button class="icon-btn" data-act="close">${ico('x')}</button></h3>
+ <p class="note" style="margin:-4px 0 10px">구글 드라이브의 시트에 지출·예산·체크리스트를 함께 저장해서, 같은 연결 주소와 가족 코드를 넣은 휴대폰끼리 자동으로 맞춰요.</p>
+ <div class="field"><label>연결 주소 (Apps Script 웹 앱 URL)</label><input class="inp" id="syUrl" placeholder="https://script.google.com/macros/s/.../exec" value="${esc(prefillUrl||c.url||'')}"></div>
+ <div class="field"><label>가족 코드 (4자 이상, 처음 연결할 때 정한 코드가 저장됨)</label><input class="inp" id="syCode" type="password" autocomplete="off" value="${esc(c.code||'')}"></div>
+ <button class="btn primary block" data-act="syConnect">연결하고 맞추기</button>
+ ${syncCfg?`<button class="btn block" style="margin-top:8px" data-act="syNow">지금 맞추기</button><button class="btn ghost block danger" style="margin-top:8px" data-act="syOff">이 휴대폰 연결 해제</button>`:''}
+ <p class="note">처음 연결하면 이 휴대폰 기록과 시트 기록이 합쳐집니다. 같은 항목을 둘이 고치면 나중에 고친 쪽이 남아요.</p>`);
+}
+async function syncConnect(){
+ const url=$('#syUrl').value.trim(),code=$('#syCode').value.trim();
+ if(!/^https:\/\/script\.google(usercontent)?\.com\//.test(url)){toast('연결 주소를 확인하세요');return}
+ if(code.length<4){toast('가족 코드는 4자 이상');return}
+ const btn=document.querySelector('[data-act="syConnect"]');if(btn){btn.disabled=true;btn.textContent='연결 중…'}
+ try{
+  const j=await syncCall({url,code},{action:'sync',state:localState()});
+  syncCfg={url,code};store.set('sync',syncCfg);applyServer(j.state);syncInfo={last:Date.now(),err:''};store.set('syncInfo',syncInfo);
+  closeSheet();render();toast('연결했어요. 이제 자동으로 맞춰져요');
+ }catch(e){toast(e.message==='wrong_code'?'가족 코드가 맞지 않아요':'연결 실패: 주소·배포 설정을 확인하세요');if(btn){btn.disabled=false;btn.textContent='연결하고 맞추기'}}
+}
 const expDateLabel=e=>{if(e.date==='pre'){if(e.pdate){const p=e.pdate.split('-');return '출발 전 · '+(+p[1])+'/'+(+p[2])}return '출발 전'}const L=dLabel(e.date);return L.m+'/'+L.d};
 const expSortKey=e=>e.date==='pre'?'0000'+(e.pdate||''):e.date;
 const won0=n=>Math.round(Number(n)||0).toLocaleString('ko-KR')+'원';
@@ -767,7 +828,7 @@ function renderMoney(){
  const tbK=CATS.reduce((a,c)=>a+budK(c.k),0),tsK=expenses.reduce((a,e)=>a+expK(e),0);
  const byCat={},byCatK={},byDay={},byDayK={};
  expenses.forEach(e=>{byCat[e.cat]=(byCat[e.cat]||0)+(+e.aud||0);byCatK[e.cat]=(byCatK[e.cat]||0)+expK(e);byDay[e.date]=(byDay[e.date]||0)+(+e.aud||0);byDayK[e.date]=(byDayK[e.date]||0)+expK(e)});
- let h=`<div class="seg" style="margin-bottom:10px"><button class="${dispCur==='AUD'?'on':''}" data-disp="AUD">호주달러로 보기</button><button class="${dispCur==='KRW'?'on':''}" data-disp="KRW">원화로 보기</button></div>
+ let h=`${syncCfg?'<div style="display:flex;justify-content:flex-end;margin:-2px 2px 6px"><button class="pill" data-act="syNow" id="syncBadge" style="border:0"></button></div>':''}<div class="seg" style="margin-bottom:10px"><button class="${dispCur==='AUD'?'on':''}" data-disp="AUD">호주달러로 보기</button><button class="${dispCur==='KRW'?'on':''}" data-disp="KRW">원화로 보기</button></div>
  <section class="sum"><small>지금까지 쓴 돈</small><div class="big">${money2(ts,tsK)}</div><small>약 ${money2b(ts,tsK)} · 환율 1 AUD = ${rate.toLocaleString()}원</small>
  <div class="bar"><i style="width:${pct}%"></i></div>
  <div class="sum-grid"><div>예산<b>${money2(tb,tbK)}</b></div><div>남은 예산<b style="${left<0?'color:#E3A397':''}">${money2(left,tbK-tsK)}</b></div><div>사용률<b>${tb?Math.round(ts/tb*100):0}%</b></div></div></section>
@@ -801,6 +862,7 @@ function renderPrep(){
  h+=`<div class="sec-title">비상 · 유용한 링크</div><section class="card links"><a href="tel:000">${ico('phone')}호주 응급 전화 000 (경찰·소방·구급)</a>${LINKS.map(l=>`<a href="${l[1]}" target="_blank" rel="noopener">${ico('link')}${l[0]}</a>`).join('')}</section>`;
  h+=`<div class="sec-title">설정</div><section class="card">
   <div class="setrow"><div>${ico('lock')} 앱 잠금 (숫자 4자리)<small>${lockOn?'켜짐 · 앱을 열 때마다 비밀번호 입력':'꺼짐 · 누구나 바로 열 수 있음'}</small></div><button class="switch ${lockOn?'on':''}" data-act="lock" aria-label="앱 잠금"></button></div>
+  <div class="setrow"><div>가족 공유 동기화<small>${syncCfg?('연결됨 · '+syncAgo()+(syncInfo.err&&syncInfo.err!=='offline'?' · 확인 필요':'')):'연결 안 됨 · 구글 드라이브 시트로 아내 휴대폰과 공유'}</small></div><button class="btn" data-act="sync">${syncCfg?'관리':'연결'}</button></div>
   <div class="setrow"><div>환율<small>1 AUD = ${rate.toLocaleString()}원 (출발 전 실제 환율로 수정)</small></div><button class="btn" data-act="rate">수정</button></div>
   <div class="setrow"><div>지출 백업<small>기록을 파일로 저장 / 불러오기</small></div><div style="display:flex;gap:6px"><button class="btn" data-act="export">${ico('dl')}</button><button class="btn" data-act="import">${ico('ul')}</button></div></div>
   <div class="setrow"><div>홈 화면에 추가<small>아이폰: 사파리 공유 버튼 → 홈 화면에 추가<br>안드로이드: 크롬 메뉴 → 홈 화면에 추가(앱 설치)</small></div></div>
@@ -840,6 +902,7 @@ function saveExp(){
  const cur=segVal('fCur');const a=cur==='KRW'?amt/rate:amt;lastCur=cur;
  const dsel=$('#fDate').value;const id=$('#fId').value;
  const rec={date:dsel,pdate:dsel==='pre'?($('#fPdate').value||''):'',cat:segVal('fCat'),desc:desc||(CATS.find(c=>c.k===segVal('fCat')).l),amt,cur,aud:Math.round(a*100)/100,pay:segVal('fPay')};
+ rec.u=Date.now();
  if(id){const old=expenses.find(x=>x.id===id);if(old)Object.assign(old,rec,{edited:new Date().toISOString()})}
  else expenses.push(Object.assign({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),at:new Date().toISOString()},rec));
  saveAll();closeSheet();render();toast(id?'수정했어요':'저장했어요');
@@ -904,7 +967,7 @@ function importData(file){
  const r=new FileReader();
  r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.expenses))throw 0;
   if(!confirm('백업 파일로 지금 기록을 바꿀까요? (지출 '+d.expenses.length+'건)'))return;
-  expenses=d.expenses;budget=Object.assign({},DEF_BUDGET,d.budget||{});rate=d.rate||rate;checks=d.checks||checks;budgetIn=d.budgetIn||{};dispCur=d.dispCur||dispCur;saveAll();render();toast('불러왔어요')}catch(e){toast('올바른 백업 파일이 아니에요')}};
+  expenses=d.expenses;budget=Object.assign({},DEF_BUDGET,d.budget||{});rate=d.rate||rate;checks=d.checks||checks;budgetIn=d.budgetIn||{};dispCur=d.dispCur||dispCur;const now=Date.now();expenses.forEach(e=>e.u=now);budgetU=now;rateU=now;saveAll();render();toast('불러왔어요')}catch(e){toast('올바른 백업 파일이 아니에요')}};
  r.readAsText(file);
 }
 
@@ -919,6 +982,7 @@ function render(){
  const m=$('#main');
  m.innerHTML=S.tab==='plan'?renderPlan():S.tab==='map'?renderMap():S.tab==='money'?renderMoney():renderPrep();
  if(S.tab==='map')initMap();
+ updSyncBadge();
  const fab=$('#fab');fab.innerHTML=ico('plus');fab.style.display=(S.tab==='plan'||S.tab==='money')?'flex':'none';
 }
 document.addEventListener('click',e=>{
@@ -932,10 +996,10 @@ document.addEventListener('click',e=>{
  const go=t.closest('[data-go]');if(go&&!go.disabled){S.day=Math.max(0,Math.min(DAYS.length-1,S.day+ +go.dataset.go));render();scrollTo({top:0,behavior:'smooth'});return}
  if(t.closest('#dday')){const ti=todayIdx();S.tab='plan';if(ti>=0){S.day=ti;S.overview=false}else{S.overview=true}render();return}
  if(t.closest('#fab')){sheetAdd();return}
- const ck=t.closest('[data-check]');if(ck){const id=ck.dataset.check;checks[id]=!checks[id];saveAll();ck.classList.toggle('done',checks[id]);return}
+ const ck=t.closest('[data-check]');if(ck){const id=ck.dataset.check;checks[id]=!checks[id];checksU[id]=Date.now();saveAll();ck.classList.toggle('done',checks[id]);return}
  const dc=t.closest('[data-disp]');if(dc){dispCur=dc.dataset.disp;saveAll();render();return}
  const ed=t.closest('[data-expday]');if(ed){S.expDay=ed.dataset.expday||null;render();return}
- const del=t.closest('[data-del]');if(del){if(confirm('이 지출을 삭제할까요?')){expenses=expenses.filter(x=>x.id!==del.dataset.del);saveAll();closeSheet();render();toast('삭제했어요')}return}
+ const del=t.closest('[data-del]');if(del){if(confirm('이 지출을 삭제할까요?')){tombs[del.dataset.del]=Date.now();expenses=expenses.filter(x=>x.id!==del.dataset.del);saveAll();closeSheet();render();toast('삭제했어요')}return}
  const edt=t.closest('[data-edit]');if(edt){sheetAdd(edt.dataset.edit);return}
  const sb=t.closest('.seg button,.catgrid button');if(sb){sb.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('on'));sb.classList.add('on');return}
  const act=t.closest('[data-act]');if(!act)return;
@@ -944,11 +1008,15 @@ document.addEventListener('click',e=>{
   case 'budget':sheetBudget();break;
   case 'close':closeSheet();break;
   case 'saveExp':saveExp();break;
-  case 'saveBud':document.querySelectorAll('[data-bud]').forEach(i=>{const k=i.dataset.bud;const v=Math.max(0,parseFloat(i.value)||0);const cb=document.querySelector('[data-budcur="'+k+'"] button.on');const cur=cb?cb.dataset.v:'AUD';budgetIn[k]={amt:v,cur};budget[k]=cur==='KRW'?Math.round(v/rate):v});saveAll();closeSheet();render();toast('예산을 저장했어요');break;
-  case 'resetBud':budget=Object.assign({},DEF_BUDGET);budgetIn={};saveAll();closeSheet();render();toast('추정치로 되돌렸어요');break;
+  case 'saveBud':document.querySelectorAll('[data-bud]').forEach(i=>{const k=i.dataset.bud;const v=Math.max(0,parseFloat(i.value)||0);const cb=document.querySelector('[data-budcur="'+k+'"] button.on');const cur=cb?cb.dataset.v:'AUD';budgetIn[k]={amt:v,cur};budget[k]=cur==='KRW'?Math.round(v/rate):v});budgetU=Date.now();saveAll();closeSheet();render();toast('예산을 저장했어요');break;
+  case 'resetBud':budget=Object.assign({},DEF_BUDGET);budgetIn={};budgetU=Date.now();saveAll();closeSheet();render();toast('추정치로 되돌렸어요');break;
   case 'rate':sheetRate();break;
-  case 'saveRate':{const v=parseFloat($('#fRate').value);if(v>0){rate=v;recalcFromKRW();saveAll()}closeSheet();render();break}
+  case 'saveRate':{const v=parseFloat($('#fRate').value);if(v>0){rate=v;rateU=Date.now();recalcFromKRW();saveAll()}closeSheet();render();break}
   case 'lock':sheetLock();break;
+  case 'sync':sheetSync();break;
+  case 'syConnect':syncConnect();break;
+  case 'syNow':closeSheet();doSync(true);break;
+  case 'syOff':if(confirm('이 휴대폰의 공유 연결을 해제할까요? (기록은 이 휴대폰에 남아요)')){syncCfg=null;store.del('sync');closeSheet();render();toast('연결을 해제했어요')}break;
   case 'export':exportData();break;
   case 'import':$('#importFile').click();break;
  }
@@ -965,6 +1033,11 @@ $('#main').addEventListener('touchend',e=>{if(S.tab!=='plan'||S.overview)return;
  const ti=todayIdx();S.day=ti>=0?ti:store.get('day',0);S.overview=ti<0;
  window.addEventListener('pagehide',()=>store.set('day',S.day));
  render();
+ const hm=location.hash.match(/^#sync=(.+)$/);if(hm){const u=decodeURIComponent(hm[1]);history.replaceState(null,'',location.pathname);setTimeout(()=>{S.tab='prep';render();sheetSync(u)},300)}
+ if(syncCfg)doSync();
+ document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&syncCfg)doSync()});
+ window.addEventListener('online',()=>{if(syncCfg)doSync()});
+ setInterval(()=>{if(syncCfg&&document.visibilityState==='visible')doSync()},90000);
  if(store.get('pin',null)&&sessionStorage.getItem('syd27_ok')!=='1')showLock();
  if('serviceWorker' in navigator&&location.protocol==='https:'){navigator.serviceWorker.register('sw.js').catch(()=>{})}
  setInterval(()=>{if(S.tab==='plan'&&todayIdx()===S.day&&!$('#overlay').classList.contains('show'))render()},60000);
