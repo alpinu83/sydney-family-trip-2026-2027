@@ -334,6 +334,8 @@ const P={
  featherdale:{n:'Featherdale Sydney Wildlife Park',q:'Featherdale Sydney Wildlife Park Doonside',ll:[-33.7680,150.8880]},
  echo:{n:'Echo Point · 세 자매봉',q:'Echo Point Lookout Katoomba',ll:[-33.7320,150.3120]},
  scenic:{n:'Scenic World',q:'Scenic World Katoomba',ll:[-33.7280,150.3010]},
+ nsop:{n:'North Sydney Olympic Pool',q:'North Sydney Olympic Pool Milsons Point',ll:[-33.8486,151.2106]},
+ bridge:{n:'하버브리지 보행로',q:'Sydney Harbour Bridge pedestrian walkway',ll:[-33.8523,151.2108]},
  sealife:{n:'씨라이프 수족관 옆 집결지 (1-5 Wheat Rd)',q:'1-5 Wheat Road Sydney NSW 2000',ll:[-33.8697,151.2022]},
  leura:{n:'로라 마을 (Leura)',q:'Leura Mall Leura NSW',ll:[-33.7135,150.3310]},
  cahill:{n:'카힐 전망대 (Cahills Lookout)',q:'Cahills Lookout Katoomba',ll:[-33.7085,150.2885]}
@@ -355,6 +357,9 @@ const U={
  bmKlook:'https://www.klook.com/ko/activity/167648-featherdale-scenic-world-blue-mountains-tour-with-korean-guide/',
  starTour:'https://kr.trip.com/things-to-do/detail/103194334/',
  rocks:'https://www.therocks.com/whats-on/market-overview',
+ nsop:'https://northsydneyolympicpool.com.au/visit-us',
+ bio:'https://www.smartraveller.gov.au/travel-essentials/australias-biosecurity-and-border-controls',
+ eta:'https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/electronic-travel-authority-601',
  sohTour:'https://www.sydneyoperahouse.com/tours/sydney-opera-house-tour',
  airportLink:'https://airportlink.com.au/trip-information/price',
  fares:'https://www.transport.nsw.gov.au/system/files/media/documents/2026/public-transport-fares-and-ticketing-brochure.pdf'
@@ -447,17 +452,18 @@ const DAYS=[
  {t:'22:30',k:'move',title:'씨라이프 도착 → 택시로 호텔',n:'도착 시간은 바우처 기준. 늦은 시간이라 택시가 편함(약 20분)',p:'crowne',go:'택시 · 약 20분',mode:'driving'}
 ],tips:['동물원이 없는 "선셋+별보기" 상품으로 예약 (중복 방지)','1/1 예약 가능 여부, 출발 시간 바우처 확인','긴팔 겉옷·담요 (산 위 밤은 쌀쌀함)','아이들 오전에 충분히 재우기']},
 
-{date:'2027-01-02',tag:'Day 8',title:'더 록스 마켓 · 마지막 시내',sum:'토요일 더 록스 마켓 구경, 오후엔 하고 싶은 것 하나 골라서 여유 있게',stay:'Crowne Plaza Sydney Airport',stayP:'crowne',stayN:'3/3박',items:[
+{date:'2027-01-02',tag:'Day 8',title:'더 록스 마켓 · 하버브리지 · 수영장',sum:'마켓 구경 후 하버브리지를 걸어서 건너고, 다리 바로 아래 노스시드니 올림픽 수영장에서 마지막 물놀이',stay:'Crowne Plaza Sydney Airport',stayP:'crowne',stayN:'3/3박',items:[
  {t:'09:00',k:'move',title:'호텔 → Circular Quay',n:'어젯밤 늦었으면 출발을 늦춰도 됨 (마켓은 17:00까지)',p:'rocks',go:'기차 · 약 25분',mode:'transit'},
- {t:'10:00',k:'star',title:'The Rocks Markets',n:'토·일 10:00~17:00. 수공예품·길거리 음식·라이브 음악. 하버브리지 아래 옛 거리라 구경거리도 많음. (원래 넣었던 Carriageworks 시장은 1/16까지 여름 휴장)',p:'rocks',url:U.rocks},
- {t:'12:00',k:'food',title:'더 록스 점심',n:'마켓 길거리 음식으로 간단히',p:'rocks'},
- {t:'13:00',k:'ferry',title:'맨리 페리 · 셸리 비치',n:'페리로 하버를 한 바퀴 보는 저렴한 방법. 셸리 비치는 물이 잔잔해 물놀이 좋음',p:'shelly',opt:1},
- {t:'13:30',k:'see',title:'QVB · 호주 박물관',n:'기념품 쇼핑(면세 환급은 한 매장 $300 이상) 또는 공룡 전시가 있는 박물관(일반 입장 무료)',p:'museum',opt:1},
- {t:'14:00',k:'show',title:'Storytime Ballet: 신데렐라',n:'오페라하우스, 마켓에서 도보 10분. 3세 이상 아이용, 1시간 이내. 초3이 원할 때만. 1인 $59~88',p:'opera',url:U.ballet,opt:1},
- {t:'16:30',k:'shop',title:'Wolli Creek 울월스 장보기',n:'내일 아침·귀국 전 간식. 공항 안보다 저렴',p:'wolli',go:'기차 · 약 25분',mode:'transit',c:'약 $40'},
- {t:'17:30',k:'stay',title:'호텔 · 짐 싸기',n:'여권, 탑승권, 환급 영수증은 한 파우치에. 수하물 무게 확인',p:'crowne'},
+ {t:'10:00',k:'star',title:'The Rocks Markets',n:'토·일 10:00~17:00. 수공예품·길거리 음식·라이브 음악. 기념품도 여기서. (원래 넣었던 Carriageworks 시장은 1/16까지 여름 휴장)',p:'rocks',url:U.rocks},
+ {t:'11:45',k:'see',title:'하버브리지 걸어서 건너기',n:'더 록스에서 다리 위 보행로로 올라가 밀슨스 포인트까지 약 25분(무료). 오페라하우스가 내려다보이는 최고의 사진 포인트',p:'bridge',go:'도보 약 25분',mode:'walking',hl:1},
+ {t:'12:30',k:'swim',title:'노스시드니 올림픽 수영장',n:'하버브리지 바로 아래 50m 야외 온수풀, 어린이풀·물놀이터, 젤라또 바. 2026년 8월 재개장. 토요일 07:00~19:00(풀은 18:30까지). 현금 불가, 카드만',p:'nsop',url:U.nsop,hl:1,c:'가족(2+2) $31.70'},
+ {t:'13:30',k:'food',title:'수영장 카페에서 점심',p:'nsop'},
+ {t:'14:00',k:'show',title:'Storytime Ballet: 신데렐라',n:'수영 대신 초3이 원하면. 오페라하우스, 3세 이상 아이용 1시간 이내. 1인 $59~88',p:'opera',url:U.ballet,opt:1},
+ {t:'15:30',k:'move',title:'밀슨스 포인트역 → Wolli Creek',n:'기차로 시내를 지나 공항 방향으로',p:'wolli',go:'기차 · 약 35분',mode:'transit'},
+ {t:'16:30',k:'shop',title:'Wolli Creek 울월스 장보기',n:'내일 아침·귀국 전 간식. 공항 안보다 저렴',p:'wolli',c:'약 $40'},
+ {t:'17:30',k:'stay',title:'호텔 · 짐 싸기',n:'여권, 탑승권, 면세 환급 영수증은 한 파우치에. 젖은 수영복은 지퍼백, 수하물 무게 확인',p:'crowne'},
  {t:'18:30',k:'food',title:'이른 저녁 · 일찍 자기',p:'crowne'}
-],tips:['오후 일정 하나만 고르기','장바구니 챙기기','지출 데이터 백업 (준비 탭)']},
+],tips:['수영복·수경·수건 챙기기 (호텔 수건 반출 금지)','하버브리지 위는 그늘이 없어 모자·물 필수','지출 데이터 백업 (준비 탭)']},
 
 {date:'2027-01-03',tag:'귀국',title:'시드니 출발 · 인천 도착',sum:'여유 있게 공항으로. 수고하셨습니다',items:[
  {t:'07:00',k:'car',title:'체크아웃 · 국제선 터미널',n:'호텔 셔틀 또는 택시. 국제선 T1',p:'syd',go:'셔틀·택시 · 약 10~15분',mode:'driving'},
@@ -471,7 +477,7 @@ const DAYS=[
 const CATS=[
  {k:'flight',l:'항공',c:'#5E7389',ic:'fly',n:'성수기 왕복 이코노미 4인 추정. 실제 결제액으로 바꾸세요'},
  {k:'hotel',l:'숙소',c:'#8C7E9C',ic:'stay',n:'샹그릴라 2박 + Furama 3박 + Crowne Plaza 3박 추정. 실제 결제액으로 바꾸세요'},
- {k:'tour',l:'투어·입장',c:'#5E8682',ic:'see',n:'타롱가 $144 + 포트스테판 한국어 투어(돌고래 옵션 포함) 약 $600 + 블루마운틴·페더데일(시닉월드 포함) 약 $440 + 선셋 별보기 약 $210 + 아이스버그 등. 4인 추정'},
+ {k:'tour',l:'투어·입장',c:'#5E8682',ic:'see',n:'타롱가 $144 + 포트스테판 한국어 투어(돌고래 옵션 포함) 약 $600 + 블루마운틴·페더데일(시닉월드 포함) 약 $440 + 선셋 별보기 약 $210 + 아이스버그·노스시드니 수영장 등. 4인 추정'},
  {k:'transport',l:'교통',c:'#7D869C',ic:'move',n:'택시 4~5회 + 대중교통(기차·페리·버스)'},
  {k:'food',l:'외식',c:'#B5806A',ic:'food',n:'하루 약 $170 × 8일 (점심은 도시락 위주)'},
  {k:'grocery',l:'장보기',c:'#9C8A5C',ic:'shop',n:'아침·피크닉·간식 (3~4회)'},
@@ -479,7 +485,7 @@ const CATS=[
  {k:'shopping',l:'쇼핑',c:'#A08E7B',ic:'shop',n:'기념품·선물'},
  {k:'etc',l:'예비·기타',c:'#858A82',ic:'tip',n:'약 5% 여유분'}
 ];
-const DEF_BUDGET={flight:8400,hotel:3340,tour:1450,transport:450,food:1360,grocery:300,show:300,shopping:600,etc:700};
+const DEF_BUDGET={flight:8400,hotel:3340,tour:1480,transport:450,food:1360,grocery:300,show:300,shopping:600,etc:700};
 
 const TODO=[
  {id:'eta',t:'호주 ETA(전자여행허가) 4인 신청·승인',d:'출발 전'},
@@ -496,9 +502,30 @@ const TODO=[
  {id:'htl',t:'숙소 3곳 확인서 저장 · 얼리 체크인 요청',d:'출발 전'},
  {id:'sim',t:'데이터 로밍 또는 eSIM',d:'출발 전'}
 ];
-const PACK=['여권 4개 (유효기간 확인)','수영복 · 래시가드 · 아쿠아슈즈','모자 · 선크림 · 선글라스 (자외선 매우 강함)','얇은 겉옷 (저녁·배 위 바람)','우비 · 작은 우산','보조배터리 · 충전 케이블','멀티 어댑터 (호주 I형)','상비약 · 멀미약','물병','보냉백 · 돗자리 (피크닉·NYE)','비치타월 · 지퍼백 (모래·젖은 옷)','장바구니'];
+const PACKG=[
+ {g:'서류 · 돈',i:['여권 4개 (남은 기간 6개월 이상)','호주 ETA 4인 승인 확인 (앱)','항공·숙소·투어 바우처: 휴대폰 오프라인 저장 + 종이 1부','여행자보험 영문 증서','해외결제 카드 2장 이상 (컨택리스 카드는 교통카드로도 사용)','호주달러 소액 현금 (코알라 사진 $25 등)','여권 사본 · 여권사진 2장 (분실 대비)']},
+ {g:'전자기기',i:['멀티 어댑터 I형 2~3개 + 작은 멀티탭 (한국 220V 기기 그대로 사용)','보조배터리 (기내 휴대만, 위탁 수하물 금지)','충전 케이블 넉넉히','eSIM 또는 로밍','아이들 영상·게임 미리 다운로드 (기내 10시간)','미니 삼각대 (별 사진)']},
+ {g:'옷 · 신발',i:['여름옷 + 얇은 긴팔 (자외선·실내 냉방)','바람막이·얇은 플리스 (블루마운틴 밤은 도심보다 10도가량 낮음, 배 위 바람)','운동화 (샌드보딩·트레킹)','샌들 또는 아쿠아슈즈','실내 슬리퍼 (호주 호텔은 없는 곳 많음)','잠옷']},
+ {g:'물놀이',i:['수영복 · 긴팔 래시가드','수경 (아이스버그·노스시드니 수영장)','비치타월 (호텔 수건은 밖에 못 가져감)','방수팩 (휴대폰)','젖은 옷용 지퍼백','샌드보딩용 양말·마스크·여벌옷']},
+ {g:'햇빛 대비',i:['선크림 SPF50+ (현지 마트에서 사도 좋음)','챙 넓은 모자 (캡보다 목·귀까지 가림)','선글라스 (아이들 것도)','립밤 · 알로에 젤']},
+ {g:'건강 · 위생',i:['아이용 해열제·진통제','소화제 · 지사제','멀미약 (크루즈·장거리 버스)','밴드 · 상처 연고','모기 기피제','처방약은 원래 포장 + 영문 처방전','물티슈 · 손소독제']},
+ {g:'생활 · 기타',i:['물병 (수돗물 마셔도 됨)','장바구니 (마트 봉투 유료)','보냉백 · 돗자리 (피크닉·NYE)','접이식 우산','아이별 작은 배낭','아이 연락처 카드 (영문 이름·부모 전화·호텔명, NYE 인파 대비)','빨래망 · 세제 시트','입국 신고서용 볼펜']}
+];
+const TIPS=[
+ ['음식은 "모르면 신고"','라면(고기 스프), 김치, 육포, 과일, 견과류, 꿀, 쌀 등은 입국 카드에 신고해야 합니다. 신고하면 대부분 검사 후 돌려주지만, 숨기면 벌금. 기내식도 들고 내리면 안 됨'],
+ ['약은 원래 포장 그대로','처방약은 영문 처방전이나 의사 소견서와 함께, 3개월 분량 이내로'],
+ ['신발 흙 털고 가기','농장·숲에서 신던 등산화·운동화는 깨끗이 씻어 가기 (입국 검사 대상)'],
+ ['교통은 탭 한 번','어른은 컨택리스 카드로 바로 탭, 아이들은 Child Opal. 주말·공휴일은 하루 요금 상한이 낮아서(성인 $9.65) 이번 일정 대부분이 저렴해요. 내릴 때도 꼭 탭'],
+ ['해변은 깃발 사이에서만','빨강·노랑 깃발 사이가 안전요원이 지키는 구역. 이안류 사고가 상어보다 훨씬 많음'],
+ ['자외선은 한국 여름의 몇 배','오전 11시~오후 3시는 그늘에서, 선크림은 2시간마다 다시. 흐린 날에도 탐'],
+ ['수돗물 마셔도 돼요','물병 하나로 생수값 절약. 관광지마다 식수대 있음'],
+ ['팁 문화 없음, 카드 수수료는 있음','팁은 안 줘도 됨. 대신 카드 결제 시 1~2% 수수료가 붙는 가게가 많고, 공휴일엔 10~15% 추가 요금 붙는 식당도 있음'],
+ ['면세 환급(TRS)','한 매장에서 $300 이상 산 물건은 출국 때 공항에서 환급. 영수증 원본과 물건은 기내로, TRS 앱에 미리 입력하면 줄이 짧음'],
+ ['시차는 +2시간','12~1월 시드니는 서머타임이라 한국보다 2시간 빠름'],
+ ['비상 연락','응급 000 (휴대폰은 112도 연결). 아이들 휴대폰·연락처 카드에 부모 번호 저장']
+];
 const LINKS=[
- ['교통 경로 찾기 (Transport NSW)',U.trip],['NYE 교통 안내 2026',U.nye],['오페라하우스 포코트 예약',U.forecourt],['North Sydney NYE 관람지',U.northSyd],['오페라하우스 한국어 투어',U.sohTour],['타롱가 동물원 티켓',U.taronga],['포트스테판 한국어 풀코스 (트립닷컴)',U.psTour],['블루마운틴 + 페더데일 오전 투어 (트립닷컴)',U.bmTour],['블루마운틴 + 페더데일 투어 (클룩)',U.bmKlook],['블루마운틴 선셋+별보기, 동물원 없음 (트립닷컴)',U.starTour],['Oakvale 운영 시간',U.oakvale],['The Rocks Markets',U.rocks],['NSW 대중교통 요금 (2026)',U.fares],['공항철도 요금',U.airportLink]
+ ['교통 경로 찾기 (Transport NSW)',U.trip],['NYE 교통 안내 2026',U.nye],['오페라하우스 포코트 예약',U.forecourt],['North Sydney NYE 관람지',U.northSyd],['오페라하우스 한국어 투어',U.sohTour],['타롱가 동물원 티켓',U.taronga],['포트스테판 한국어 풀코스 (트립닷컴)',U.psTour],['블루마운틴 + 페더데일 오전 투어 (트립닷컴)',U.bmTour],['블루마운틴 + 페더데일 투어 (클룩)',U.bmKlook],['블루마운틴 선셋+별보기, 동물원 없음 (트립닷컴)',U.starTour],['Oakvale 운영 시간',U.oakvale],['The Rocks Markets',U.rocks],['노스시드니 올림픽 수영장',U.nsop],['호주 입국 시 음식·약 신고 안내',U.bio],['NSW 대중교통 요금 (2026)',U.fares],['공항철도 요금',U.airportLink]
 ];
 
 /* ---------- storage ---------- */
@@ -689,7 +716,8 @@ function renderPrep(){
   <div class="bk"><span class="ci" style="background:#8C7E9C">${ico('stay')}</span><div><b>Furama Darling Harbour</b><small>12/28 ~ 12/31 (3박)</small><small><a href="${mapQ(P.furama.q)}" target="_blank" rel="noopener">지도</a></small></div></div>
   <div class="bk"><span class="ci" style="background:#8C7E9C">${ico('stay')}</span><div><b>Crowne Plaza Sydney Airport by IHG</b><small>12/31 ~ 1/3 (3박)</small><small><a href="${mapQ(P.crowne.q)}" target="_blank" rel="noopener">지도</a></small></div></div>
  </section>`;
- h+=`<div class="sec-title">준비물</div><section class="card"><ul class="check">${PACK.map((p,i)=>checkLi('pack-'+i,p)).join('')}</ul></section>`;
+ h+=`<div class="sec-title">준비물 (${PACKG.reduce((a,g)=>a+g.i.length,0)}개)</div>`+PACKG.map((g,gi)=>`<section class="card" style="margin-bottom:8px"><b style="font-size:13.5px;color:var(--accent-ink)">${g.g}</b><ul class="check">${g.i.map((p,i)=>checkLi('pk-'+gi+'-'+i,p)).join('')}</ul></section>`).join('');
+ h+=`<div class="sec-title">여행 꿀팁</div><section class="card">${TIPS.map(t=>`<div class="bk"><span class="ci" style="background:var(--accent)">${ico('tip')}</span><div><b>${t[0]}</b><small>${t[1]}</small></div></div>`).join('')}</section>`;
  h+=`<div class="sec-title">비상 · 유용한 링크</div><section class="card links"><a href="tel:000">${ico('phone')}호주 응급 전화 000 (경찰·소방·구급)</a>${LINKS.map(l=>`<a href="${l[1]}" target="_blank" rel="noopener">${ico('link')}${l[0]}</a>`).join('')}</section>`;
  h+=`<div class="sec-title">설정</div><section class="card">
   <div class="setrow"><div>${ico('lock')} 앱 잠금 (숫자 4자리)<small>${lockOn?'켜짐 · 앱을 열 때마다 비밀번호 입력':'꺼짐 · 누구나 바로 열 수 있음'}</small></div><button class="switch ${lockOn?'on':''}" data-act="lock" aria-label="앱 잠금"></button></div>
