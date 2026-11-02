@@ -343,6 +343,7 @@ const P={
  scenic:{n:'Scenic World',q:'Scenic World Katoomba',ll:[-33.7280,150.3010]},
  observ:{n:'옵저버토리 힐 (Observatory Hill)',q:'Observatory Hill Park Sydney',ll:[-33.8593,151.2046]},
  dq:{n:'달링 쿼터 놀이터',q:'Darling Quarter Playground',ll:[-33.8748,151.2004]},
+ maritime:{n:'호주 국립해양박물관',q:'Australian National Maritime Museum',ll:[-33.8693,151.1987]},
  nsop:{n:'North Sydney Olympic Pool',q:'North Sydney Olympic Pool Milsons Point',ll:[-33.8486,151.2106]},
  bridge:{n:'하버브리지 보행로',q:'Sydney Harbour Bridge pedestrian walkway',ll:[-33.8523,151.2108]},
  mascotC:{n:'Mascot Central 울월스 (Mascot역 앞)',q:'Woolworths Mascot 55 Church Ave',ll:[-33.9218,151.1873]},
@@ -521,6 +522,10 @@ const PACKG=[
  {g:'건강 · 위생',i:['안경 + 여분 안경·안경집','호르몬약 (기내 가방에, 원래 포장 + 영문 처방전, 입국 시 약 신고)','안약','비염약','아이용 해열제·진통제','소화제 · 지사제','멀미약 (크루즈·장거리 버스)','밴드 · 상처 연고','모기 기피제','처방약은 원래 포장 + 영문 처방전','물티슈 · 손소독제']},
  {g:'생활 · 기타',i:['물병 (수돗물 마셔도 됨)','장바구니 (마트 봉투 유료)','보냉백 · 돗자리 (피크닉·NYE)','접이식 우산','아이별 작은 배낭','아이 연락처 카드 (영문 이름·부모 전화·호텔명, NYE 인파 대비)','빨래망 · 세제 시트','입국 신고서용 볼펜']}
 ];
+const REFS=[
+ {k:'swim',title:'씨라이프 시드니 수족관',where:'달링하버 · 투어 집결지 바로 옆, Furama에서 걸어서 약 15분',info:['매일 10:00~17:00 (마지막 입장 16:00). 주말·공휴일·방학 중 일부 날짜는 30분 일찍 열고 1시간 늦게 닫음','온라인 성인 $39~, 아동(2~15세) $24~ (방학·주말은 더 비쌈). 현장 구매 성인 $57이라 온라인 예매 필수. 현금 불가','듀공, 상어 터널, 펭귄 등. 시드니 동물원(WILD LIFE) 등과 묶은 2·3곳 패스로 사면 할인'],when:'비 오는 날 본다이 대신, 또는 12/28 오후 놀이터 대신 (마지막 입장 시간 확인)',url:'https://www.visitsealife.com/sydney/tickets-passes',p:'sealife'},
+ {k:'ferry',title:'호주 국립해양박물관',where:'달링하버 피어몬트 다리 옆, Furama에서 걸어서 약 15분',info:['매일 10:00~16:00, 방학 기간 09:30~17:00 (크리스마스만 휴관)','실제 군함·잠수함·범선에 올라가 볼 수 있음 (키 90cm 이상)','배까지 포함한 통합권 성인 $35, 아동(4~15세) $25, 가족(성인 2+아동 3) $89. 전시만 보면 가족 $69'],when:'비 오거나 너무 더운 날 실내 대안. 수족관과 걸어서 10분 거리라 묶어서 가도 됨',url:'https://www.sea.museum/en/tickets',p:'maritime'}
+];
 const TIPS=[
  ['음식은 "모르면 신고"','라면(고기 스프), 김치, 육포, 과일, 견과류, 꿀, 쌀 등은 입국 카드에 신고해야 합니다. 신고하면 대부분 검사 후 돌려주지만, 숨기면 벌금. 기내식도 들고 내리면 안 됨'],
  ['약은 원래 포장 그대로','처방약은 영문 처방전이나 의사 소견서와 함께, 3개월 분량 이내로'],
@@ -653,6 +658,9 @@ function initDayMap(){
   DMAP.fitBounds(L.latLngBounds(lls),{padding:[30,30],maxZoom:15});
  }).catch(()=>{el.innerHTML='<div class="map-msg">지도를 불러오지 못했어요. 아래 "구글 지도로 전체 경로" 버튼을 이용하세요.</div>'});
 }
+function refsHtml(){
+ return '<div class="sec-title">참고 · 여유 있을 때 들를 곳</div><section class="card">'+REFS.map(r=>`<div class="bk"><span class="ci" style="background:${TYPES[r.k].c}">${ico(r.k)}</span><div><b>${r.title}</b><small>${r.where}</small><ul style="margin:6px 0 4px;padding-left:16px;font-size:12.5px;color:#4E5552">${r.info.map(x=>'<li>'+x+'</li>').join('')}</ul><small><b style="display:inline;font-size:12px;color:var(--accent-ink)">언제?</b> ${r.when}</small><small style="margin-top:4px"><a href="${r.url}" target="_blank" rel="noopener">공식 정보</a> · <a href="${mapQ(P[r.p].q)}" target="_blank" rel="noopener">지도</a></small></div></div>`).join('')+'</section><p class="note">일정에는 넣지 않은 참고 장소입니다. 가격·시간은 2026년 11월 기준이라 가기 전에 확인하세요.</p>';
+}
 function renderOverview(){
  const ti=todayIdx();
  const segs=[{n:'기내',c:'#9AA19B',k:1},{n:'Shangri-La',c:STAYC.shangri,k:2},{n:'Furama',c:STAYC.furama,k:3},{n:'Crowne Plaza',c:STAYC.crowne,k:3}];
@@ -672,6 +680,7 @@ function renderOverview(){
   ${d.stay?`<div class="ov-stay"><i style="background:${STAYC[d.stayP]||'#999'}"></i>${esc(d.stay)} ${d.stayN||''}</div>`:''}</div></button>`;
  }).join('');
  h+='</div><div class="legend"><span><span class="hl must" style="padding:1px 7px">주황</span>미리 예약이 필요한 일정</span><span>줄을 누르면 그날 상세 일정</span></div>';
+ h+=refsHtml();
  return h;
 }
 function renderPlan(){
@@ -692,6 +701,7 @@ function renderPlan(){
  });
  h+='</section>';
  if(d.tips) h+=`<div class="sec-title">오늘 체크</div><section class="card"><ul class="check">${d.tips.map((t,j)=>checkLi('d'+d.date+'-'+j,t)).join('')}</ul></section>`;
+ if(d.stayP==='furama') h+=refsHtml();
  h+=`<div class="daynav"><button class="btn" data-go="-1" ${S.day===0?'disabled style="opacity:.4"':''}>${ico('left')}이전 날</button><button class="btn" data-go="1" ${S.day===DAYS.length-1?'disabled style="opacity:.4"':''}>다음 날${ico('right')}</button></div>`;
  return h;
 }
