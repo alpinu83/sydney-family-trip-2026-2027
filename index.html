@@ -338,6 +338,9 @@ const P={
  qvb:{n:'QVB · Pitt St Mall',q:'Queen Victoria Building Sydney',ll:[-33.8718,151.2067]},
  museum:{n:'Australian Museum',q:'Australian Museum Sydney',ll:[-33.8744,151.2132]},
  meet:{n:'시내 투어 집결지 (예약 확인서 기준)',q:'Town Hall Station Sydney',ll:[-33.8732,151.2070]},
+ grounds:{n:'더 그라운즈 오브 알렉산드리아',q:'The Grounds of Alexandria',ll:[-33.9106,151.1943]},
+ fishmkt:{n:'시드니 피시마켓 (새 건물)',q:'Sydney Fish Market Bridge Road Glebe',ll:[-33.8744,151.1907]},
+ bwbay:{n:'블랙와틀 베이 공원 · 글리브 해안 산책로',q:'Blackwattle Bay Park Glebe',ll:[-33.8725,151.1854]},
  featherdale:{n:'Featherdale Sydney Wildlife Park',q:'Featherdale Sydney Wildlife Park Doonside',ll:[-33.7680,150.8880]},
  echo:{n:'Echo Point · 세 자매봉',q:'Echo Point Lookout Katoomba',ll:[-33.7320,150.3120]},
  scenic:{n:'Scenic World',q:'Scenic World Katoomba',ll:[-33.7280,150.3010]},
@@ -367,7 +370,9 @@ const U={
  psTour:'https://kr.trip.com/things-to-do/detail/103092853/',
  bmTour:'https://kr.trip.com/things-to-do/detail/103422385/',
  bmKlook:'https://www.klook.com/ko/activity/167648-featherdale-scenic-world-blue-mountains-tour-with-korean-guide/',
- starTour:'https://kr.trip.com/things-to-do/detail/103194334/',
+ grounds:'https://thegrounds.com.au/dine-in/the-grounds-cafe/',
+ fishmkt:'https://www.sydneyfishmarket.com.au/plan-your-visit/',
+ glebe:'https://www.cityofsydney.nsw.gov.au/parks/blackwattle-bay-park',
  rocks:'https://www.therocks.com/whats-on/market-overview',
  nsop:'https://northsydneyolympicpool.com.au/visit-us',
  bio:'https://www.smartraveller.gov.au/travel-essentials/australias-biosecurity-and-border-controls',
@@ -459,17 +464,19 @@ const DAYS=[
  {t:'00:30',k:'move',title:'기차로 Mascot역 → 호텔',n:'자정 이후 기차가 자주 다닙니다. Circular Quay역은 매우 붐비니 Wynyard·Town Hall역까지 걸어가는 것도 방법. 택시·우버는 거의 불가능하다고 생각하기',p:'crowne',go:'기차 · 혼잡',mode:'transit'}
 ],tips:['포코트 예약 실패 시: 준비 탭의 예비 관람지 확인','시내에 차로 들어가지 않기','귀가 경로·막차 정보 미리 캡처 (Transport NSW)']},
 
-{date:'2027-01-01',tag:'Day 7',hol:'공휴일 · 새해',title:'새해 첫날 · 블루마운틴 별보기',sum:'오전은 푹 쉬고, 13:30 출발 선셋·별보기 투어. 어제 간 동물원이 빠진 상품으로',stay:'Crowne Plaza Sydney Airport',stayP:'crowne',stayN:'2/3박',items:[
- {t:'10:00',k:'stay',title:'늦잠 · 호텔에서 휴식',n:'어젯밤 NYE로 늦게 잤으니 충분히 자기. 밤 투어 체력 확보',p:'crowne'},
- {t:'11:45',k:'food',title:'호텔 근처 이른 점심',p:'crowne'},
- {t:'12:45',k:'move',title:'Mascot역 → Town Hall역 → 집결지',n:'호텔에서 Mascot역까지 약 350m. 기차로 Town Hall역(약 15분) 후 씨라이프까지 도보 약 10분. Mascot역은 공항역이 아니라 역 이용료 없음(출발 전 확인). 공휴일 시간표라 여유 있게',p:'sealife',go:'도보 + 기차 · 약 35분',mode:'transit'},
- {t:'13:30',k:'move',title:'블루마운틴 선셋 별보기 투어 출발',n:'12~1월은 13:30 출발(바우처에서 확인). 1/1 예약 가능한지 날짜 선택 화면에서 확인. 버스 정시 출발',p:'sealife',url:U.starTour,must:1,c:'1인 약 50,000원~'},
- {t:'16:00',k:'see',title:'에코포인트 · 카힐 전망대',n:'세 자매봉은 어제와 겹치지만 오후 빛이 달라 느낌이 다름. 카힐 전망대는 일몰 명소',p:'cahill'},
- {t:'18:00',k:'food',title:'카툼바 저녁 (자유식)',n:'가이드 추천 식당. 저녁값 별도',p:'echo'},
- {t:'20:00',k:'star',title:'블루마운틴 일몰',n:'여름엔 해가 저녁 8시쯤 져요. 산 위는 도심보다 10도가량 낮으니 겉옷 필수',p:'cahill'},
- {t:'21:00',k:'star',title:'남반구 별 보기',n:'남십자성과 은하수. 날씨 때문에 별을 못 보면 시티 야경 투어로 대체',p:'echo'},
- {t:'22:30',k:'move',title:'씨라이프 도착 → 택시로 호텔',n:'밤 늦게 아이들과 기차 갈아타기보다 택시가 편함(약 20분). 우버·택시 앱 미리 설치',p:'crowne',go:'택시 · 약 20분',mode:'driving',c:'약 $40'}
-],tips:['동물원이 없는 "선셋+별보기" 상품으로 예약 (중복 방지)','1/1 예약 가능 여부, 출발 시간 바우처 확인','긴팔 겉옷·담요 (산 위 밤은 쌀쌀함)','아이들 오전에 충분히 재우기']},
+{date:'2027-01-01',tag:'Day 7',hol:'공휴일 · 새해',title:'새해 첫날 · 더 그라운즈 브런치 · 피시마켓 저녁',sum:'늦잠 후 더 그라운즈 오브 알렉산드리아에서 브런치, 오후는 호텔에서 쉬기. 저녁은 새 시드니 피시마켓에서 먹고 글리브 해안 산책로에서 해 질 녘 안작 브리지와 시내 야경',stay:'Crowne Plaza Sydney Airport',stayP:'crowne',stayN:'2/3박',items:[
+ {t:'09:30',k:'stay',title:'늦잠 · 천천히 준비',n:'어젯밤 NYE로 늦게 잤으니 충분히 자기',p:'crowne'},
+ {t:'10:15',k:'car',title:'택시로 더 그라운즈 이동',n:'호텔에서 가까운 알렉산드리아. 공휴일이라 택시·우버 앱으로 미리 부르기',p:'grounds',go:'택시 · 약 10분(추정)',mode:'driving',c:'약 $20(추정)'},
+ {t:'10:30',k:'food',title:'더 그라운즈 오브 알렉산드리아 브런치',n:'시드니 대표 인스타 명소 카페. 덩굴 아치·꽃 장식 사진 스폿과 농장 동물 구경. 아침(브런치) 메뉴는 11:45까지. 카페는 주말 07:00~16:00 기준이라 공휴일 영업시간은 미리 확인. 워크인도 되지만 공휴일이라 온라인 예약 추천, 자리가 없으면 대기 문자를 받고 정원 구경',p:'grounds',url:U.grounds,must:1},
+ {t:'12:15',k:'see',title:'정원 · 동물 구경 후 호텔로',n:'식사 후 정원과 사진 스폿 둘러보고 택시로 호텔',p:'grounds'},
+ {t:'13:00',k:'stay',title:'호텔 낮잠 · 휴식',n:'NYE 다음 날이라 오후는 꼭 쉬기. 저녁 외출 전 체력 충전',p:'crowne'},
+ {t:'16:00',k:'car',title:'택시로 시드니 피시마켓 이동',n:'공휴일이라 택시가 편함. 대중교통이면 기차로 Central역 후 L1 경전철(Fish Market 정류장 근처)',p:'fishmkt',go:'택시 · 약 20~25분(추정)',mode:'driving',c:'약 $35(추정)'},
+ {t:'16:30',k:'see',title:'새 시드니 피시마켓 구경',n:'2026년 1월 문을 연 새 건물(물결 모양 지붕). 매일 07:00~22:00이지만 생선 가게는 오후 4~5시쯤 닫는 곳이 많아 수산물 구경은 도착하자마자. 공휴일 영업시간은 미리 확인',p:'fishmkt',url:U.fishmkt},
+ {t:'17:30',k:'food',title:'피시마켓 해산물 저녁',n:'피시앤칩스·굴·새우 등. 가게마다 영업시간이 다르니 문 연 식당 확인하고 이른 저녁으로',p:'fishmkt'},
+ {t:'19:00',k:'see',title:'글리브 해안 산책로 (Glebe Foreshore Walk)',n:'피시마켓에서 블랙와틀 베이를 따라 이어지는 평평한 산책로. 블랙와틀 베이 공원까지 천천히 걷기(약 15~20분, 추정). 놀이터·화장실 있음',p:'bwbay',url:U.glebe},
+ {t:'20:00',k:'star',title:'해 질 녘 안작 브리지 · 시내 야경',n:'공원 잔디밭에서 일몰(저녁 8시쯤)과 안작 브리지, 시내 불빛이 켜지는 모습 보기',p:'bwbay'},
+ {t:'20:45',k:'car',title:'택시로 Crowne Plaza 복귀',n:'Glebe Point Road 쪽에서 택시 잡기. 내일 아침 장보기·짐 정리가 있으니 일찍 자기',p:'crowne',go:'택시 · 약 25분(추정)',mode:'driving',c:'약 $40(추정)'}
+],tips:['더 그라운즈: 1/1 공휴일 영업시간 확인 후 10:30 4인 예약','피시마켓 생선 가게는 오후 4~5시쯤 닫는 곳이 많음','오후 낮잠으로 체력 회복','해 질 녘 산책용 얇은 겉옷 · 모기 기피제']},
 
 {date:'2027-01-02',tag:'Day 8',title:'수영장 · 하버브리지 · 옵저버토리 야경',sum:'아침 장보기와 짐 정리 후 시내로. 더 록스 마켓과 하버브리지를 걷고, 노스시드니 올림픽 수영장에서 물놀이. 근처에서 쉬다가 저녁 식사 후 옵저버토리 힐 야경을 보고 숙소로',stay:'Crowne Plaza Sydney Airport',stayP:'crowne',stayN:'3/3박',items:[
  {t:'08:00',k:'stay',title:'짐 싸기 · 귀국 준비',n:'여권, 탑승권, 면세 환급 영수증은 한 파우치에. 내일 짐은 미리 정리하고 수영 후 갈아입을 옷 챙기기',p:'crowne'},
@@ -516,6 +523,7 @@ const TODO=[
  {id:'gigi',t:"Gigi's Pizzeria 12/27 18:30 4인 예약 완료 (#65954071) · Special Occasion 메모 작성",d:'Manage Reservation에서'},
  {id:'ps',t:'12/29 포트스테판 한국어 풀코스 예약 (돌고래 크루즈 포함 패키지 B)',d:'연말 성수기, 일찍',u:U.psTour},
  {id:'bm',t:'12/30 블루마운틴 + 페더데일(시닉 4명) + 별밤 연계 투어 예약 확정 · 07:30 출발(07:20 집결) / 별밤 16:50 출발(16:40 집결)',d:'확정 메일 받음',u:U.bmTour},
+ {id:'grounds',t:'1/1 더 그라운즈 카페 10:30 4인 예약 (공휴일 영업시간도 확인)',d:'출발 전',u:U.grounds},
  {id:'opal',t:'교통카드: 어른은 컨택리스 카드, 아이들은 Child Opal',d:'도착 후'},
  {id:'ins',t:'여행자보험 가입',d:'출발 전'},
  {id:'htl',t:'숙소 3곳 확인서 저장 · 얼리 체크인 요청',d:'출발 전'},
@@ -548,7 +556,7 @@ const TIPS=[
  ['비상 연락','응급 000 (휴대폰은 112도 연결). 아이들 휴대폰·연락처 카드에 부모 번호 저장']
 ];
 const LINKS=[
- ['교통 경로 찾기 (Transport NSW)',U.trip],['NYE 교통 안내 2026',U.nye],['오페라하우스 포코트 예약',U.forecourt],['North Sydney NYE 관람지',U.northSyd],['오페라하우스 한국어 투어',U.sohTour],['타롱가 동물원 티켓',U.taronga],['포트스테판 한국어 풀코스 (트립닷컴)',U.psTour],['블루마운틴 + 페더데일 오전 투어 (트립닷컴)',U.bmTour],['블루마운틴 + 페더데일 투어 (클룩)',U.bmKlook],['블루마운틴 선셋+별보기, 동물원 없음 (트립닷컴)',U.starTour],['Oakvale 운영 시간',U.oakvale],['The Rocks Markets',U.rocks],['노스시드니 올림픽 수영장',U.nsop],['호주 입국 시 음식·약 신고 안내',U.bio],['NSW 대중교통 요금 (2026)',U.fares],['공항철도 요금',U.airportLink]
+ ['교통 경로 찾기 (Transport NSW)',U.trip],['NYE 교통 안내 2026',U.nye],['오페라하우스 포코트 예약',U.forecourt],['North Sydney NYE 관람지',U.northSyd],['오페라하우스 한국어 투어',U.sohTour],['타롱가 동물원 티켓',U.taronga],['포트스테판 한국어 풀코스 (트립닷컴)',U.psTour],['블루마운틴 + 페더데일 오전 투어 (트립닷컴)',U.bmTour],['블루마운틴 + 페더데일 투어 (클룩)',U.bmKlook],['더 그라운즈 오브 알렉산드리아 카페 (예약)',U.grounds],['시드니 피시마켓 방문 안내',U.fishmkt],['블랙와틀 베이 공원 · 글리브 해안 산책로',U.glebe],['Oakvale 운영 시간',U.oakvale],['The Rocks Markets',U.rocks],['노스시드니 올림픽 수영장',U.nsop],['호주 입국 시 음식·약 신고 안내',U.bio],['NSW 대중교통 요금 (2026)',U.fares],['공항철도 요금',U.airportLink]
 ];
 
 /* ---------- storage ---------- */
