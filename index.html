@@ -498,15 +498,14 @@ const DAYS=[
 const CATS=[
  {k:'flight',l:'항공',c:'#5E7389',ic:'fly',n:'성수기 왕복 이코노미 4인 추정. 실제 결제액으로 바꾸세요'},
  {k:'hotel',l:'숙소',c:'#8C7E9C',ic:'stay',n:'샹그릴라 2박 + Furama 3박 + Crowne Plaza 3박 추정. 실제 결제액으로 바꾸세요'},
- {k:'tour',l:'투어·입장',c:'#5E8682',ic:'see',n:'타롱가 $144 + 포트스테판 한국어 투어(돌고래 옵션 포함) 약 $600 + 블루마운틴·페더데일(시닉월드 포함) 약 $440 + 12/30 별밤 연계 투어 약 $210(추정) + 아이스버그·노스시드니 수영장 등. 4인 추정'},
+ {k:'tour',l:'투어·입장',c:'#5E8682',ic:'see',n:'타롱가 $144 + 오페라하우스 한국어 건물 투어 + 포트스테판 한국어 투어(돌고래 옵션 포함) 약 $600 + 블루마운틴·페더데일(시닉월드 포함) 약 $440 + 12/30 별밤 연계 투어 약 $210(추정) + 아이스버그·노스시드니 수영장 등. 4인 추정'},
  {k:'transport',l:'교통',c:'#7D869C',ic:'move',n:'택시 4~5회 + 대중교통(기차·페리·버스)'},
  {k:'food',l:'외식',c:'#B5806A',ic:'food',n:'하루 약 $170 × 8일 (점심은 도시락 위주)'},
  {k:'grocery',l:'장보기',c:'#9C8A5C',ic:'shop',n:'아침·피크닉·간식 (3~4회)'},
- {k:'show',l:'오페라하우스 투어',c:'#A2707C',ic:'show',n:'오페라하우스 한국어 건물 투어 4인 기준'},
  {k:'shopping',l:'쇼핑',c:'#A08E7B',ic:'shop',n:'기념품·선물'},
  {k:'etc',l:'예비·기타',c:'#858A82',ic:'tip',n:'약 5% 여유분'}
 ];
-const DEF_BUDGET={flight:8400,hotel:3340,tour:1480,transport:450,food:1360,grocery:300,show:150,shopping:600,etc:700};
+const DEF_BUDGET={flight:8400,hotel:3340,tour:1630,transport:450,food:1360,grocery:300,shopping:600,etc:700};
 
 const TODO=[
  {id:'eta',t:'호주 ETA(전자여행허가) 4인 신청·승인',d:'출발 전'},
@@ -563,6 +562,19 @@ let dispCur=store.get('dispCur','AUD');
 let lastCur=store.get('lastCur','AUD');
 let tombs=store.get('tombs',{}),checksU=store.get('checksU',{}),budgetU=store.get('budgetU',0),rateU=store.get('rateU',0);
 let syncCfg=store.get('sync',null),syncInfo=store.get('syncInfo',{});
+function normCats(){
+ /* 예전 '오페라하우스 투어'(show) 카테고리를 '투어·입장'(tour)으로 합치기 */
+ let ch=false;const now=Date.now();
+ expenses.forEach(e=>{if(e.cat==='show'){e.cat='tour';e.u=now;ch=true}});
+ if('show' in budget||budgetIn.show){
+  const sh=+budget.show||0,b=budgetIn.show,a=budgetIn.tour;
+  budget.tour=(+budget.tour||0)+sh;delete budget.show;
+  if(a){if(a.cur==='KRW')a.amt=(+a.amt||0)+(b&&b.cur==='KRW'?(+b.amt||0):Math.round(sh*rate));else a.amt=budget.tour}
+  delete budgetIn.show;budgetU=now;ch=true;
+ }
+ return ch;
+}
+if(normCats())saveLocal();
 const S={tab:store.get('tab','plan'),day:0,mapAll:false,expDay:null,overview:false};
 const STAYC={shangri:'#8C7E9C',furama:'#5E8682',crowne:'#B5806A'};
 
@@ -598,7 +610,8 @@ function applyServer(st){
  if(st.budget){budget=Object.assign({},DEF_BUDGET,st.budget.budget||{});budgetIn=st.budget.budgetIn||{};budgetU=st.budget.u||0}
  if(st.rate&&st.rate.v){rate=st.rate.v;rateU=st.rate.u||0}
  const ck={},cu={};Object.keys(st.checks||{}).forEach(k=>{const o=st.checks[k];if(o){ck[k]=!!o.v;cu[k]=o.u||0}});checks=ck;checksU=cu;
- recalcFromKRW();saveLocal();
+ recalcFromKRW();
+ if(normCats()){saveLocal();setTimeout(scheduleSync,0)}saveLocal();
 }
 async function syncCall(cfg,body){
  const res=await fetch(cfg.url,{method:'POST',body:JSON.stringify(Object.assign({code:cfg.code},body)),redirect:'follow'});
@@ -850,7 +863,7 @@ function renderMoney(){
  h+=DAYS.map(d=>{const L=dLabel(d.date);return `<button class="dt ${S.expDay===d.date?'on':''}" data-expday="${d.date}"><span>${L.m}/${L.d} ${L.w}</span><b>${money2(byDay[d.date]||0,byDayK[d.date]||0)}</b></button>`}).join('');
  h+=`</div><div class="sec-title">지출 내역${S.expDay?' · '+(S.expDay==='pre'?'출발 전':dLabel(S.expDay).m+'/'+dLabel(S.expDay).d):''}</div><section class="card" style="padding:4px 14px">`;
  const list=expenses.filter(e=>!S.expDay||e.date===S.expDay).slice().sort((a,b)=>(expSortKey(b)+b.at).localeCompare(expSortKey(a)+a.at));
- h+=list.length?list.map(e=>{const c=CATS.find(x=>x.k===e.cat)||CATS[8];const orig=e.cur==='KRW'?won0(e.amt):aud(e.amt,2);const conv=e.cur==='KRW'?'≈ '+aud(e.aud,2):'≈ '+won0(e.aud*rate);return `<div class="exp" data-edit="${e.id}" style="cursor:pointer"><span class="ci" style="background:${c.c}">${ico(c.ic)}</span><div class="t"><b>${esc(e.desc)}</b><small>${expDateLabel(e)} · ${c.l} · ${e.pay==='cash'?'현금':'카드'}</small></div><div class="amt">${orig}<small>${conv}</small></div><button class="icon-btn" data-del="${e.id}" aria-label="삭제">${ico('trash')}</button></div>`}).join(''):'<div class="empty">아직 기록이 없어요.<br>오른쪽 아래 + 버튼으로 바로 기록하세요.</div>';
+ h+=list.length?list.map(e=>{const c=CATS.find(x=>x.k===e.cat)||CATS.find(x=>x.k==='etc');const orig=e.cur==='KRW'?won0(e.amt):aud(e.amt,2);const conv=e.cur==='KRW'?'≈ '+aud(e.aud,2):'≈ '+won0(e.aud*rate);return `<div class="exp" data-edit="${e.id}" style="cursor:pointer"><span class="ci" style="background:${c.c}">${ico(c.ic)}</span><div class="t"><b>${esc(e.desc)}</b><small>${expDateLabel(e)} · ${c.l} · ${e.pay==='cash'?'현금':'카드'}</small></div><div class="amt">${orig}<small>${conv}</small></div><button class="icon-btn" data-del="${e.id}" aria-label="삭제">${ico('trash')}</button></div>`}).join(''):'<div class="empty">아직 기록이 없어요.<br>오른쪽 아래 + 버튼으로 바로 기록하세요.</div>';
  h+=`</section><p class="note">지출 내역을 누르면 수정할 수 있어요. 원화로 입력한 금액은 원화 그대로 보관되고, 호주달러 환산은 준비 탭의 환율로 계산합니다. 기록은 이 휴대폰의 브라우저에만 저장되니 가끔 백업 파일을 저장해 두세요.</p>`;
  return h;
 }
@@ -976,7 +989,7 @@ function importData(file){
  const r=new FileReader();
  r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.expenses))throw 0;
   if(!confirm('백업 파일로 지금 기록을 바꿀까요? (지출 '+d.expenses.length+'건)'))return;
-  expenses=d.expenses;budget=Object.assign({},DEF_BUDGET,d.budget||{});rate=d.rate||rate;checks=d.checks||checks;budgetIn=d.budgetIn||{};dispCur=d.dispCur||dispCur;const now=Date.now();expenses.forEach(e=>e.u=now);budgetU=now;rateU=now;saveAll();render();toast('불러왔어요')}catch(e){toast('올바른 백업 파일이 아니에요')}};
+  expenses=d.expenses;budget=Object.assign({},DEF_BUDGET,d.budget||{});rate=d.rate||rate;checks=d.checks||checks;budgetIn=d.budgetIn||{};normCats();dispCur=d.dispCur||dispCur;const now=Date.now();expenses.forEach(e=>e.u=now);budgetU=now;rateU=now;saveAll();render();toast('불러왔어요')}catch(e){toast('올바른 백업 파일이 아니에요')}};
  r.readAsText(file);
 }
 
