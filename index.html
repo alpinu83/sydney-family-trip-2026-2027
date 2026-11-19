@@ -351,6 +351,7 @@ const P={
  bridge:{n:'하버브리지 보행로',q:'Sydney Harbour Bridge pedestrian walkway',ll:[-33.8523,151.2108]},
  mascotC:{n:'Mascot Central 울월스 (Mascot역 앞)',q:'Woolworths Mascot 55 Church Ave',ll:[-33.9218,151.1873]},
  sealife:{n:'씨라이프 수족관 옆 집결지 (1-5 Wheat Rd)',q:'1-5 Wheat Road Sydney NSW 2000',ll:[-33.8697,151.2022]},
+ rydges:{n:'포트스테판 투어 하차 (389 Pitt St, Rydges 앞)',q:'389 Pitt Street Sydney NSW 2000',ll:[-33.8777,151.2074]},
  leura:{n:'로라 마을 (Leura)',q:'Leura Mall Leura NSW',ll:[-33.7135,150.3310]},
  cahill:{n:'카힐 전망대 (Cahills Lookout)',q:'Cahills Lookout Katoomba',ll:[-33.7085,150.2885]},
  gigi:{n:"Gigi's Pizzeria (뉴타운)",q:'Gigi Pizzeria 379 King St Newtown NSW',ll:[-33.8986,151.1774]}
@@ -367,7 +368,7 @@ const U={
  nye:'https://transportnsw.info/events/2026/12/sydney-new-years-eve-2026',
  northSyd:'https://www.northsydney.nsw.gov.au/NYE',
  trip:'https://transportnsw.info/trip',
- psTour:'https://kr.trip.com/things-to-do/detail/103092853/',
+ psTour:'https://experiences.myrealtrip.com/products/3149960',
  bmTour:'https://kr.trip.com/things-to-do/detail/103422385/',
  bmKlook:'https://www.klook.com/ko/activity/167648-featherdale-scenic-world-blue-mountains-tour-with-korean-guide/',
  grounds:'https://thegrounds.com.au/dine-in/the-grounds-cafe/',
@@ -426,16 +427,16 @@ const DAYS=[
  {t:'18:00',k:'food',title:'달링하버 이른 저녁 · 일찍 자기',n:'내일 06:35 출발이라 일찍 먹고 일찍 자기. 내일 아침거리도 미리 사 두기',p:'darling'}
 ],tips:['대체 공휴일이라 본다이가 매우 붐빔, 일찍 출발','수영복·래시가드·수건·아쿠아슈즈','해변 날씨·파도 경보 확인','내일 포트스테판 투어 집결 시간·장소 확인 (일찍 자기)']},
 
-{date:'2026-12-29',tag:'Day 4',title:'포트스테판 한국어 투어',sum:'06:50 씨라이프 수족관 옆 출발(19:30 복귀). Oakvale 동물원, 와이너리 점심, 돌고래 크루즈, 사막 샌드보딩',stay:'Furama Darling Harbour',stayP:'furama',stayN:'2/3박',items:[
- {t:'06:35',k:'move',title:'씨라이프 수족관 옆 집결지로',n:'Furama에서 걸어서 약 15분. 수족관 입구가 아니라 옆 고가도로 아래 도로변(1-5 Wheat Rd). 전날 밤 알림톡으로 위치 안내가 옴',p:'sealife',go:'도보 약 15분',mode:'walking'},
- {t:'06:50',k:'move',title:'투어 집결 · 출발',n:'버스 정시 출발, 늦으면 노쇼 처리. 버스 안 음식·음료 금지라 아침은 미리. 돌고래 크루즈가 포함된 패키지 B로 예약',p:'sealife',url:U.psTour,must:1,c:'패키지 B 1인 147,471원~'},
- {t:'10:00',k:'star',title:'Oakvale Wildlife Park',n:'코알라 쓰다듬기·사진, 동물 먹이 무료 포함(약 1시간)',p:'oakvale'},
- {t:'11:30',k:'food',title:'B Farm 와이너리 점심 (포함)',n:'어른은 현지식 버거, 아이는 화덕피자. 어른은 와인 시음',p:'oakvale'},
- {t:'13:00',k:'ferry',hl:1,title:'문쉐도우 돌고래 크루즈 (약 2시간)',n:'넬슨베이 출발. 따뜻한 날엔 배 뒤 그물(붐넷)에서 물놀이 가능. 패키지 A면 이 시간은 자유시간',p:'nelson'},
- {t:'15:15',k:'star',title:'애나베이 사막 4WD · 샌드보딩',n:'모래언덕을 보드로 미끄러져 내려오기(약 1시간). 체력 소모가 커서 물 넉넉히',p:'annaBay'},
- {t:'19:30',k:'move',title:'씨라이프 수족관 앞 도착',n:'교통 상황에 따라 늦어질 수 있음. Furama까지 도보 15분',p:'sealife',go:'버스 · 약 3시간',mode:'driving'},
- {t:'20:00',k:'food',title:'숙소 근처에서 간단한 저녁',n:'Furama 근처는 Woolworths Town Hall, Coles Broadway가 밤 늦게까지 영업',p:'darling'}
-],tips:['돌고래 크루즈 포함 패키지 B로 예약','수영복·여벌옷·수건·모래 털 지퍼백','마스크·양말(샌드보딩), 멀미약(버스 3시간+배)','버스 안 음식 금지, 아침은 미리 먹기']},
+{date:'2026-12-29',tag:'Day 4',title:'포트스테판 한국어 투어',sum:'06:50 씨라이프 수족관 옆 집결, 07:00 출발(18:30경 Pitt St 하차). 대한관광 D.베스트: 돌고래 크루즈, 4WD 샌드보딩, Oakvale 동물원. 와이너리 없음, 점심 자유식',stay:'Furama Darling Harbour',stayP:'furama',stayN:'2/3박',items:[
+ {t:'06:35',k:'move',title:'씨라이프 수족관 옆 집결지로',n:'Furama에서 걸어서 약 15분. 수족관 입구를 바라보고 오른쪽 도로변(1-5 Wheat Rd). 30일 블루마운틴 투어와 같은 집결지',p:'sealife',go:'도보 약 15분',mode:'walking'},
+ {t:'06:50',k:'move',title:'투어 집결 (07:00 정시 출발)',n:'마이리얼트립 예약 확정 (예약번호 EXP-20261119-00006855). 대한관광여행사 D.베스트, 성인 2 · 아동 2, 점심 미포함. 늦으면 합류 불가. 버스 안 음식·음료 금지라 아침은 미리. 캐리어 반입·카시트 제공 불가',p:'sealife',url:U.psTour,must:1,c:'성인 142,571원 · 아동 133,548원 (쿠폰 적용 전)'},
+ {t:'10:30',k:'ferry',hl:1,title:'넬슨베이 돌고래 크루즈',n:'야생 돌고래 관찰. 따뜻한 날엔 배 뒤 그물(붐넷)에서 물놀이 가능(날씨·선장 판단). 탈의실이 없으니 수영복은 미리 입고 가기',p:'nelson'},
+ {t:'12:10',k:'food',title:'넬슨베이 점심 (자유식)',n:'점심 옵션 안 넣음. 가이드 추천 맛집이나 피시앤칩스·미트파이. 점심값 별도',p:'nelson'},
+ {t:'13:10',k:'star',title:'애나베이 사막 4WD · 샌드보딩',n:'4WD로 사구에 들어가 모래언덕에서 샌드보딩. 아이용 낮은 언덕도 있음. 모래가 뜨거워 양말 필수, 물 넉넉히',p:'annaBay'},
+ {t:'14:40',k:'star',title:'Oakvale Wildlife Park',n:'코알라 쓰다듬으며 사진, 캥거루·쿼카 먹이 주기(입장료 포함)',p:'oakvale'},
+ {t:'18:30',k:'move',title:'389 Pitt St (Rydges 호텔 앞) 하차',n:'15:50 포트스테판 출발, 18:30~18:50경 도착(교통 상황에 따라 변동). 주차 사정으로 근처에 내릴 수도 있음. Furama까지 걸어서 10~15분',p:'rydges',go:'버스 · 약 3시간',mode:'driving'},
+ {t:'19:00',k:'food',title:'간단한 저녁 · 내일 아침거리 사기',n:'하차 지점 근처 Woolworths Town Hall이 밤 늦게까지 영업. 내일 07:20 집결이라 아침거리도 같이 사 두고 일찍 자기',p:'darling'}
+],tips:['수영복은 미리 입기(탈의실 없음)·여벌옷·수건·모래 털 지퍼백','양말·마스크(샌드보딩), 모자·선크림·바람막이(크루즈), 멀미약','버스 안 음식 금지, 아침은 미리 먹기','대한관광여행사 확정 메일 확인 (스팸함도)']},
 
 {date:'2026-12-30',tag:'Day 5',title:'블루마운틴 + 페더데일 · 별밤 투어',sum:'07:30 출발 한국어 투어(동물원 · 로라 마을 · 시닉월드 · 세 자매봉) 후 16:50 카툼바에서 별밤 연계 투어로 이어서 일몰과 별 보기. 밤늦게 복귀',stay:'Furama Darling Harbour',stayP:'furama',stayN:'3/3박',items:[
  {t:'07:00',k:'move',title:'씨라이프 수족관 옆 집결지로',n:'Furama에서 걸어서 약 15분. SEA LIFE 수족관 정문을 바라보고 건물 오른쪽 길로. 수족관과 HELM 카페 사이 고가다리 아래가 미팅 장소(1-5 Wheat Rd)',p:'sealife',go:'도보 약 15분',mode:'walking'},
@@ -521,7 +522,7 @@ const TODO=[
  {id:'soh',t:'오페라하우스 한국어 투어 예약 (12/26 오후)',d:'출발 전',u:U.sohTour},
  {id:'tz',t:'타롱가 가족권 온라인 구매 (2성인+2아동 $144~)',d:'12/27 전',u:U.taronga},
  {id:'gigi',t:"Gigi's Pizzeria 12/27 18:30 4인 예약 완료 (#65954071) · Special Occasion 메모 작성",d:'Manage Reservation에서'},
- {id:'ps',t:'12/29 포트스테판 한국어 풀코스 예약 (돌고래 크루즈 포함 패키지 B)',d:'연말 성수기, 일찍',u:U.psTour},
+ {id:'ps',t:'12/29 포트스테판 투어 예약 확정 · 대한관광 D.베스트(돌고래 크루즈 + 4WD 샌드보딩 + 동물원) · 성인 2 · 아동 2 · 점심 자유식 · 06:50 집결',d:'대한관광 확정 메일 확인 (스팸함도)',u:U.psTour},
  {id:'bm',t:'12/30 블루마운틴 + 페더데일(시닉 4명) + 별밤 연계 투어 예약 확정 · 07:30 출발(07:20 집결) / 별밤 16:50 출발(16:40 집결)',d:'확정 메일 받음',u:U.bmTour},
  {id:'grounds',t:'1/1 더 그라운즈 카페 10:30 4인 예약 (공휴일 영업시간도 확인)',d:'출발 전',u:U.grounds},
  {id:'opal',t:'교통카드: 어른은 컨택리스 카드, 아이들은 Child Opal',d:'도착 후'},
@@ -556,7 +557,7 @@ const TIPS=[
  ['비상 연락','응급 000 (휴대폰은 112도 연결). 아이들 휴대폰·연락처 카드에 부모 번호 저장']
 ];
 const LINKS=[
- ['교통 경로 찾기 (Transport NSW)',U.trip],['NYE 교통 안내 2026',U.nye],['오페라하우스 포코트 예약',U.forecourt],['North Sydney NYE 관람지',U.northSyd],['오페라하우스 한국어 투어',U.sohTour],['타롱가 동물원 티켓',U.taronga],['포트스테판 한국어 풀코스 (트립닷컴)',U.psTour],['블루마운틴 + 페더데일 오전 투어 (트립닷컴)',U.bmTour],['블루마운틴 + 페더데일 투어 (클룩)',U.bmKlook],['더 그라운즈 오브 알렉산드리아 카페 (예약)',U.grounds],['시드니 피시마켓 방문 안내',U.fishmkt],['블랙와틀 베이 공원 · 글리브 해안 산책로',U.glebe],['Oakvale 운영 시간',U.oakvale],['The Rocks Markets',U.rocks],['노스시드니 올림픽 수영장',U.nsop],['호주 입국 시 음식·약 신고 안내',U.bio],['NSW 대중교통 요금 (2026)',U.fares],['공항철도 요금',U.airportLink]
+ ['교통 경로 찾기 (Transport NSW)',U.trip],['NYE 교통 안내 2026',U.nye],['오페라하우스 포코트 예약',U.forecourt],['North Sydney NYE 관람지',U.northSyd],['오페라하우스 한국어 투어',U.sohTour],['타롱가 동물원 티켓',U.taronga],['포트스테판 투어 (마이리얼트립 · 대한관광 D.베스트)',U.psTour],['블루마운틴 + 페더데일 오전 투어 (트립닷컴)',U.bmTour],['블루마운틴 + 페더데일 투어 (클룩)',U.bmKlook],['더 그라운즈 오브 알렉산드리아 카페 (예약)',U.grounds],['시드니 피시마켓 방문 안내',U.fishmkt],['블랙와틀 베이 공원 · 글리브 해안 산책로',U.glebe],['Oakvale 운영 시간',U.oakvale],['The Rocks Markets',U.rocks],['노스시드니 올림픽 수영장',U.nsop],['호주 입국 시 음식·약 신고 안내',U.bio],['NSW 대중교통 요금 (2026)',U.fares],['공항철도 요금',U.airportLink]
 ];
 
 /* ---------- storage ---------- */
