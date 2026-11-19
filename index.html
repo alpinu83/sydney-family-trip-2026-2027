@@ -354,9 +354,12 @@ const P={
  rydges:{n:'포트스테판 투어 하차 (389 Pitt St, Rydges 앞)',q:'389 Pitt Street Sydney NSW 2000',ll:[-33.8777,151.2074]},
  leura:{n:'로라 마을 (Leura)',q:'Leura Mall Leura NSW',ll:[-33.7135,150.3310]},
  cahill:{n:'카힐 전망대 (Cahills Lookout)',q:'Cahills Lookout Katoomba',ll:[-33.7085,150.2885]},
- gigi:{n:"Gigi's Pizzeria (뉴타운)",q:'Gigi Pizzeria 379 King St Newtown NSW',ll:[-33.8986,151.1774]}
+ gigi:{n:"Gigi's Pizzeria (뉴타운)",q:'Gigi Pizzeria 379 King St Newtown NSW',ll:[-33.8986,151.1774]},
+ usyd:{n:'시드니대학교 쿼드랭글',q:'The University of Sydney Quadrangle',ll:[-33.8859,151.1888]},
+ camperdownPark:{n:'캠퍼다운 메모리얼 레스트 파크',q:'Camperdown Memorial Rest Park Newtown',ll:[-33.8949,151.1786]}
 };
 const U={
+ usyd:'https://www.sydney.edu.au/engage/visit.html',
  forecourt:'https://www.sydneyoperahouse.com/experiences/new-years-eve-forecourt',
  taronga:'https://www.taronga.org.au/sydney-zoo/plan/visitor-information/ticket-prices',
  oakvale:'https://oakvalewildlife.com.au/visit/location-opening-times',
@@ -403,17 +406,21 @@ const DAYS=[
  {t:'19:00',k:'food',title:'객실 또는 근처에서 가벼운 저녁',p:'shangri'}
 ],tips:['10:00 포코트 예약 (실패 시 준비 탭의 예비안 참고)','오페라하우스 투어는 14:30 전후 회차로 예약','공휴일이라 상점·식당 영업시간 확인','장보기 영수증은 바로 지출 탭에 기록']},
 
-{date:'2026-12-27',tag:'Day 2',title:"타롱가 동물원 · 뉴타운 저녁",sum:"페리 타고 동물원으로. 오전에 동물이 가장 활발합니다. 저녁은 뉴타운 Gigi's 18:30 예약",stay:'Shangri-La Sydney',stayP:'shangri',stayN:'2/2박',items:[
+{date:'2026-12-27',tag:'Day 2',title:"타롱가 동물원 · 시드니대학교 · 뉴타운 저녁",sum:"페리 타고 동물원으로(14:30까지). 호텔에서 잠깐 쉬고 16:00~17:00 시드니대학교 캠퍼스 산책, 저녁은 뉴타운 Gigi's 18:30 예약",stay:'Shangri-La Sydney',stayP:'shangri',stayN:'2/2박',items:[
  {t:'08:40',k:'move',title:'Circular Quay 부두로',n:'물, 모자, 선크림, 전날 산 과일과 샌드위치 챙기기',p:'quay',go:'도보 약 10분',mode:'walking'},
  {t:'09:00',k:'ferry',title:'F2 페리 → Taronga Zoo 부두',n:'약 12분, 30분 간격. 하버 경치가 좋아 오른쪽 자리 추천',p:'taronga',go:'F2 페리 · 약 12분',mode:'transit'},
- {t:'09:30',k:'star',title:'Taronga Zoo',n:'개장 09:30~17:00(9~4월). 호주 동물 구역, 물개·새 쇼, 키퍼 토크 시간표를 보고 동선 짜기. 동물 체험은 09:00 전 도착해야 예약 가능. 오후까지 여유 있게 둘러보기',p:'taronga',url:U.taronga,c:'가족권 $144~'},
+ {t:'09:30',k:'star',title:'Taronga Zoo',n:'개장 09:30~17:00(9~4월). 오후 대학 산책 때문에 14:30쯤 나오니 호주 동물 구역, 물개·새 쇼 등 꼭 볼 곳부터. 키퍼 토크 시간표를 보고 동선 짜기. 동물 체험은 09:00 전 도착해야 예약 가능',p:'taronga',url:U.taronga,c:'가족권 $144~'},
  {t:'12:00',k:'food',title:'동물원 피크닉 점심',n:'싸 온 도시락으로 식비 절약. 하버가 보이는 잔디밭 추천',p:'taronga'},
- {t:'16:30',k:'ferry',title:'페리로 Circular Quay 귀환',p:'quay',go:'F2 페리 · 약 12분',mode:'transit'},
-{t:'17:00',k:'stay',title:'호텔 휴식 · 샤워',n:'동물원에서 많이 걸었으니 잠깐 쉬고 저녁 외출 준비',p:'shangri'},
- {t:'17:50',k:'car',title:'택시로 뉴타운 이동',n:'공휴일 다음 일요일 저녁이라 여유 있게 출발. 기차는 Wynyard → Newtown(T2, 환승 없음)도 가능',p:'gigi',go:'택시 · 약 20~25분',mode:'driving',c:'약 $35'},
+ {t:'14:30',k:'ferry',title:'페리로 Circular Quay 귀환',n:'F2는 30분 간격이라 14:15~14:45 사이 배 시간 미리 확인',p:'quay',go:'F2 페리 · 약 12분',mode:'transit'},
+ {t:'15:00',k:'stay',title:'호텔 휴식 · 샤워',n:'40분 정도 쉬고 저녁 외출 준비. 저녁까지 호텔에 안 돌아오니 물, 모자, 아이들 겉옷 챙기기',p:'shangri'},
+ {t:'15:40',k:'car',title:'택시로 시드니대학교',n:'Parramatta Rd 쪽 정문(University Place)에서 내리기. 기차면 Central역에서 걸어서 약 15분',p:'usyd',go:'택시 · 약 20분',mode:'driving',c:'약 $30'},
+ {t:'16:00',k:'see',hl:1,title:'시드니대학교 캠퍼스 산책',n:'정문 잔디밭에서 시계탑 쿼드랭글 사진, 쿼드랭글 바깥 회랑, 그레이트홀 외관, 박물관 앞을 지나 Eastern Avenue를 따라 City Rd 쪽으로(약 1시간). 12/21~1/3 대학 휴무라 건물·박물관·도서관은 닫고 야외만 가능. 쿼드랭글 안뜰은 주말엔 닫혀 있을 수 있음',p:'usyd',url:U.usyd},
+ {t:'17:00',k:'move',title:'뉴타운으로 이동',n:'City Rd를 따라 걸어서 약 25분. 아이들이 지쳤으면 택시 약 5분',p:'camperdownPark',go:'도보 약 25분 · 택시 약 5분',mode:'walking'},
+ {t:'17:30',k:'see',title:'캠퍼다운 메모리얼 레스트 파크 · 킹 스트리트 구경',n:'뉴타운의 큰 공원에서 아이들 잠깐 쉬기. 어른은 근처 킹 스트리트 가게 구경. Gigi\'s까지 걸어서 약 7분',p:'camperdownPark'},
  {t:'18:30',k:'food',hl:1,title:"Gigi's Pizzeria 저녁 (예약 완료)",n:'예약번호 65954071 · 4인 · 18:30~20:00 (90분). 나폴리 화덕 피자집. 특별한 날(Special Occasion)로 예약했으니 Manage Reservation에서 메모 작성',p:'gigi'},
  {t:'20:00',k:'car',title:'택시로 호텔 복귀',p:'shangri',go:'택시 · 약 20~25분',mode:'driving',c:'약 $35'}
-],tips:['Taronga 가족권 온라인 구매 (현장보다 저렴)',"Gigi's 18:30 예약 · 17:50엔 출발",'당일 키퍼 토크 시간표 확인 후 동선 짜기','교통카드 탭 잊지 않기 (내릴 때도)']},
+],tips:['Taronga 가족권 온라인 구매 (현장보다 저렴)','동물원은 14:30에 나오기 · 15:40 호텔에서 택시 출발',"Gigi's 18:30 예약 (대학에서 걸어서 약 25분)",'대학 휴무 기간이라 건물은 닫힘, 야외 산책만','교통카드 탭 잊지 않기 (내릴 때도)']},
+
 
 {date:'2026-12-28',tag:'Day 3',hol:'공휴일 · 박싱데이 대체',title:'본다이 비치 · 숙소 이동',sum:'오전에 짐 옮기고 본다이 아이스버그 수영, 저녁은 달링하버',stay:'Furama Darling Harbour',stayP:'furama',stayN:'1/3박',items:[
  {t:'09:00',k:'car',title:'체크아웃 → Furama로 짐 이동',n:'택시 한 번에 짐을 옮기고 프런트에 맡기기',p:'furama',go:'택시 · 약 10~15분',mode:'driving',c:'약 $25'},
@@ -557,7 +564,7 @@ const TIPS=[
  ['비상 연락','응급 000 (휴대폰은 112도 연결). 아이들 휴대폰·연락처 카드에 부모 번호 저장']
 ];
 const LINKS=[
- ['교통 경로 찾기 (Transport NSW)',U.trip],['NYE 교통 안내 2026',U.nye],['오페라하우스 포코트 예약',U.forecourt],['North Sydney NYE 관람지',U.northSyd],['오페라하우스 한국어 투어',U.sohTour],['타롱가 동물원 티켓',U.taronga],['포트스테판 투어 (마이리얼트립 · 대한관광 D.베스트)',U.psTour],['블루마운틴 + 페더데일 오전 투어 (트립닷컴)',U.bmTour],['블루마운틴 + 페더데일 투어 (클룩)',U.bmKlook],['더 그라운즈 오브 알렉산드리아 카페 (예약)',U.grounds],['시드니 피시마켓 방문 안내',U.fishmkt],['블랙와틀 베이 공원 · 글리브 해안 산책로',U.glebe],['Oakvale 운영 시간',U.oakvale],['The Rocks Markets',U.rocks],['노스시드니 올림픽 수영장',U.nsop],['호주 입국 시 음식·약 신고 안내',U.bio],['NSW 대중교통 요금 (2026)',U.fares],['공항철도 요금',U.airportLink]
+ ['교통 경로 찾기 (Transport NSW)',U.trip],['NYE 교통 안내 2026',U.nye],['오페라하우스 포코트 예약',U.forecourt],['North Sydney NYE 관람지',U.northSyd],['오페라하우스 한국어 투어',U.sohTour],['타롱가 동물원 티켓',U.taronga],['포트스테판 투어 (마이리얼트립 · 대한관광 D.베스트)',U.psTour],['블루마운틴 + 페더데일 오전 투어 (트립닷컴)',U.bmTour],['블루마운틴 + 페더데일 투어 (클룩)',U.bmKlook],['더 그라운즈 오브 알렉산드리아 카페 (예약)',U.grounds],['시드니 피시마켓 방문 안내',U.fishmkt],['블랙와틀 베이 공원 · 글리브 해안 산책로',U.glebe],['시드니대학교 방문 안내',U.usyd],['Oakvale 운영 시간',U.oakvale],['The Rocks Markets',U.rocks],['노스시드니 올림픽 수영장',U.nsop],['호주 입국 시 음식·약 신고 안내',U.bio],['NSW 대중교통 요금 (2026)',U.fares],['공항철도 요금',U.airportLink]
 ];
 
 /* ---------- storage ---------- */
