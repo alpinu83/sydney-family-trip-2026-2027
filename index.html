@@ -355,10 +355,12 @@ const P={
  leura:{n:'로라 마을 (Leura)',q:'Leura Mall Leura NSW',ll:[-33.7135,150.3310]},
  cahill:{n:'카힐 전망대 (Cahills Lookout)',q:'Cahills Lookout Katoomba',ll:[-33.7085,150.2885]},
  gigi:{n:"Gigi's Pizzeria (뉴타운)",q:'Gigi Pizzeria 379 King St Newtown NSW',ll:[-33.8986,151.1774]},
+ totti:{n:"Bar Totti's (ivy, 330 George St)",q:"Bar Totti's 330A George Street Sydney",ll:[-33.8673,151.2071]},
  usyd:{n:'시드니대학교 쿼드랭글',q:'The University of Sydney Quadrangle',ll:[-33.8859,151.1888]},
  camperdownPark:{n:'캠퍼다운 메모리얼 레스트 파크',q:'Camperdown Memorial Rest Park Newtown',ll:[-33.8949,151.1786]}
 };
 const U={
+ totti:'https://merivale.com/venues/bar-tottis/',
  usyd:'https://www.sydney.edu.au/engage/visit.html',
  forecourt:'https://www.sydneyoperahouse.com/experiences/new-years-eve-forecourt',
  taronga:'https://www.taronga.org.au/sydney-zoo/plan/visitor-information/ticket-prices',
@@ -486,20 +488,21 @@ const DAYS=[
  {t:'20:45',k:'car',title:'택시로 Crowne Plaza 복귀',n:'Glebe Point Road 쪽에서 택시 잡기. 내일 아침 장보기·짐 정리가 있으니 일찍 자기',p:'crowne',go:'택시 · 약 25분(추정)',mode:'driving',c:'약 $40(추정)'}
 ],tips:['더 그라운즈: 1/1 공휴일 영업시간 확인 후 10:30 4인 예약','피시마켓 생선 가게는 오후 4~5시쯤 닫는 곳이 많음','오후 낮잠으로 체력 회복','해 질 녘 산책용 얇은 겉옷 · 모기 기피제']},
 
-{date:'2027-01-02',tag:'Day 8',title:'수영장 · 하버브리지 · 옵저버토리 야경',sum:'아침 장보기와 짐 정리 후 시내로. 더 록스 마켓과 하버브리지를 걷고, 노스시드니 올림픽 수영장에서 물놀이. 근처에서 쉬다가 저녁 식사 후 옵저버토리 힐 야경을 보고 숙소로',stay:'Crowne Plaza Sydney Airport',stayP:'crowne',stayN:'3/3박',items:[
+{date:'2027-01-02',tag:'Day 8',title:'더 록스 · Bar Totti\'s · 하버브리지 · 수영장 · 야경',sum:'아침 장보기와 짐 정리 후 시내로. 더 록스 마켓 구경 후 12:00 Bar Totti\'s 점심, 하버브리지를 걸어 건너 노스시드니 올림픽 수영장에서 물놀이. 저녁 식사 후 옵저버토리 힐 야경을 보고 숙소로',stay:'Crowne Plaza Sydney Airport',stayP:'crowne',stayN:'3/3박',items:[
  {t:'08:00',k:'stay',title:'짐 싸기 · 귀국 준비',n:'여권, 탑승권, 면세 환급 영수증은 한 파우치에. 내일 짐은 미리 정리하고 수영 후 갈아입을 옷 챙기기',p:'crowne'},
  {t:'08:30',k:'shop',title:'Mascot 울월스 장보기',n:'Mascot Central 쇼핑가(매일 07:00~22:00). 물놀이 후 간식과 내일 아침·귀국 전 간식. 역 바로 앞',p:'mascotC',c:'약 $40'},
  {t:'09:00',k:'move',title:'Mascot역 → Circular Quay',n:'공항선이 시내 순환선을 돌아 Circular Quay역까지 바로 감',p:'rocks',go:'도보 + 기차 · 약 25분',mode:'transit'},
  {t:'10:00',k:'star',title:'The Rocks Markets',n:'토·일 10:00~17:00. 수공예품·길거리 음식·라이브 음악. 기념품도 여기서. (원래 넣었던 Carriageworks 시장은 1/16까지 여름 휴장)',p:'rocks',url:U.rocks},
- {t:'11:45',k:'see',title:'하버브리지 걸어서 건너기',n:'더 록스에서 다리 위 보행로로 올라가 밀슨스 포인트까지 약 25분(무료). 오페라하우스가 내려다보이는 최고의 사진 포인트',p:'bridge',go:'도보 약 25분',mode:'walking',hl:1},
- {t:'12:30',k:'swim',title:'노스시드니 올림픽 수영장',n:'하버브리지 바로 아래 50m 야외 온수풀, 어린이풀·물놀이터, 젤라또 바. 2026년 8월 재개장. 토요일 07:00~19:00(풀은 18:30까지). 현금 불가, 카드만',p:'nsop',url:U.nsop,hl:1,c:'가족(2+2) $31.70'},
- {t:'13:30',k:'food',title:'수영장 카페에서 점심',p:'nsop'},
- {t:'15:00',k:'see',title:'근처에서 쉬며 산책',n:'밀슨스 포인트 주변 하버 전망 공원과 해안 산책로. 수영 후 아이들 낮잠이나 휴식 시간으로 쓰기 좋음',p:'nsop'},
+ {t:'11:45',k:'move',title:'Bar Totti\'s로 이동',n:'더 록스에서 조지 스트리트를 따라 남쪽으로. ivy 건물 1층, Palings Lane 모퉁이(Wynyard역 George St 출구 맞은편)',p:'totti',go:'도보 약 15분',mode:'walking'},
+ {t:'12:00',k:'food',hl:1,title:'Bar Totti\'s 점심',n:'화덕에 구운 시그니처 빵, 안티파스티, 파스타를 나눠 먹기(저녁이 스테이크라 가볍게). 좌석 1시간 30분. 어린이 메뉴는 직원에게 문의. 예약 시 카드 등록, 2시간 전까지 취소 무료(이후·노쇼는 1인 $50)',p:'totti',url:U.totti,must:1},
+ {t:'13:30',k:'see',title:'하버브리지 걸어서 건너기',n:'더 록스 쪽 계단으로 다리 위 보행로에 올라가 밀슨스 포인트까지 약 25분(무료). 오페라하우스가 내려다보이는 최고의 사진 포인트',p:'bridge',go:'도보 약 15분 + 다리 약 25분',mode:'walking',hl:1},
+ {t:'14:15',k:'swim',title:'노스시드니 올림픽 수영장',n:'하버브리지 바로 아래 50m 야외 온수풀, 어린이풀·물놀이터, 젤라또 바. 2026년 8월 재개장. 토요일 07:00~19:00(풀은 18:30까지). 현금 불가, 카드만',p:'nsop',url:U.nsop,hl:1,c:'가족(2+2) $31.70'},
+ {t:'16:45',k:'see',title:'근처에서 쉬며 산책',n:'밀슨스 포인트 주변 하버 전망 공원과 해안 산책로. 수영 후 잠깐 쉬었다가 저녁 먹으러 이동',p:'nsop'},
  {t:'18:00',k:'move',title:'밀슨스 포인트역 → Wynyard역',n:'기차로 짧게 이동 (약 5분 추정, 노선 확인 필요). Wynyard에서 옵저버토리 힐 방향으로 도보',p:'observ',go:'기차 · 약 5분 (추정)',mode:'transit'},
  {t:'18:30',k:'food',title:'옵저버토리 힐 근처 스테이크하우스 저녁 (예약 예정)',n:'식당 이름과 예약 시간은 예약 후 입력 필요. 야경 보기 전 식사',p:'observ',go:'도보 약 5분',mode:'walking'},
  {t:'20:15',k:'see',title:'옵저버토리 힐 야경 (하버브리지 · 오페라하우스)',n:'식사 후 공원에서 야경 감상. 무료. 아이들이 뛰어놀기 좋은 잔디밭',p:'observ',go:'도보 약 5분',mode:'walking',hl:1},
  {t:'21:00',k:'car',title:'택시로 Crowne Plaza 복귀',n:'Circular Quay 쪽에서 택시로 호텔까지 (추정 25~30분, 약 $40)',p:'crowne',go:'택시 · 약 25~30분',mode:'driving',c:'약 $40 (추정)'}
-],tips:['수영복·수경·수건 챙기기 (호텔 수건 반출 금지)','하버브리지 위는 그늘이 없어 모자·물 필수','스테이크하우스 예약 후 식당 이름과 시간을 일정에 반영','Crowne Plaza 프런트에 택시 호출 도움 요청 가능 여부 확인','지출 데이터 백업 (준비 탭)']},
+],tips:['Bar Totti\'s 12:00 4인 예약 (취소는 2시간 전까지)','수영복·수경·수건 챙기기 (호텔 수건 반출 금지)','하버브리지 위는 그늘이 없어 모자·물 필수','스테이크하우스 예약 후 식당 이름과 시간을 일정에 반영','Crowne Plaza 프런트에 택시 호출 도움 요청 가능 여부 확인','지출 데이터 백업 (준비 탭)']},
 
 {date:'2027-01-03',tag:'귀국',title:'시드니 출발 · 인천 도착',sum:'여유 있게 공항으로. 수고하셨습니다',items:[
  {t:'07:00',k:'car',title:'체크아웃 · 택시로 국제선 T1',n:'차로 5~10분. 호텔 셔틀은 1인 $13.50(4인 $54, 사전 예약)이라 4인이면 택시·우버가 저렴할 가능성이 큼',p:'syd',go:'택시 · 약 5~10분',mode:'driving',c:'약 $20~30'},
@@ -564,7 +567,7 @@ const TIPS=[
  ['비상 연락','응급 000 (휴대폰은 112도 연결). 아이들 휴대폰·연락처 카드에 부모 번호 저장']
 ];
 const LINKS=[
- ['교통 경로 찾기 (Transport NSW)',U.trip],['NYE 교통 안내 2026',U.nye],['오페라하우스 포코트 예약',U.forecourt],['North Sydney NYE 관람지',U.northSyd],['오페라하우스 한국어 투어',U.sohTour],['타롱가 동물원 티켓',U.taronga],['포트스테판 투어 (마이리얼트립 · 대한관광 D.베스트)',U.psTour],['블루마운틴 + 페더데일 오전 투어 (트립닷컴)',U.bmTour],['블루마운틴 + 페더데일 투어 (클룩)',U.bmKlook],['더 그라운즈 오브 알렉산드리아 카페 (예약)',U.grounds],['시드니 피시마켓 방문 안내',U.fishmkt],['블랙와틀 베이 공원 · 글리브 해안 산책로',U.glebe],['시드니대학교 방문 안내',U.usyd],['Oakvale 운영 시간',U.oakvale],['The Rocks Markets',U.rocks],['노스시드니 올림픽 수영장',U.nsop],['호주 입국 시 음식·약 신고 안내',U.bio],['NSW 대중교통 요금 (2026)',U.fares],['공항철도 요금',U.airportLink]
+ ['교통 경로 찾기 (Transport NSW)',U.trip],['NYE 교통 안내 2026',U.nye],['오페라하우스 포코트 예약',U.forecourt],['North Sydney NYE 관람지',U.northSyd],['오페라하우스 한국어 투어',U.sohTour],['타롱가 동물원 티켓',U.taronga],['포트스테판 투어 (마이리얼트립 · 대한관광 D.베스트)',U.psTour],['블루마운틴 + 페더데일 오전 투어 (트립닷컴)',U.bmTour],['블루마운틴 + 페더데일 투어 (클룩)',U.bmKlook],['더 그라운즈 오브 알렉산드리아 카페 (예약)',U.grounds],['시드니 피시마켓 방문 안내',U.fishmkt],['블랙와틀 베이 공원 · 글리브 해안 산책로',U.glebe],['Bar Totti\'s (예약 · 영업시간)',U.totti],['시드니대학교 방문 안내',U.usyd],['Oakvale 운영 시간',U.oakvale],['The Rocks Markets',U.rocks],['노스시드니 올림픽 수영장',U.nsop],['호주 입국 시 음식·약 신고 안내',U.bio],['NSW 대중교통 요금 (2026)',U.fares],['공항철도 요금',U.airportLink]
 ];
 
 /* ---------- storage ---------- */
